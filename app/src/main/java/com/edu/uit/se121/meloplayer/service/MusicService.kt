@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.media.MediaPlayer
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.app.NotificationCompat
@@ -43,7 +44,7 @@ class MusicService : Service() {
             baseContext,
             0,
             prevIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         val playIntent = Intent(
@@ -54,7 +55,7 @@ class MusicService : Service() {
             baseContext,
             0,
             playIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         val nextIntent = Intent(
@@ -65,7 +66,7 @@ class MusicService : Service() {
             baseContext,
             0,
             nextIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         val exitIntent = Intent(
@@ -76,7 +77,7 @@ class MusicService : Service() {
             baseContext,
             0,
             exitIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         val imgArt = getImgArt(PlayerActivity.musicListPA[PlayerActivity.songPosition].path)
