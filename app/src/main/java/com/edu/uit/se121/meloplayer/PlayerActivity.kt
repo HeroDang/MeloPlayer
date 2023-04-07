@@ -1,5 +1,6 @@
 package com.edu.uit.se121.meloplayer
 
+import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
@@ -15,14 +16,15 @@ import com.edu.uit.se121.meloplayer.service.MusicService
 
 class PlayerActivity : AppCompatActivity(), ServiceConnection {
 
+
     companion object {
         lateinit var musicListPA: ArrayList<Music>
         var songPosition: Int = 0
         var isPlaying: Boolean = false
         var musicService: MusicService? = null
+        @SuppressLint("StaticFieldLeak")
+        lateinit var binding: ActivityPlayerBinding
     }
-
-    private lateinit var binding: ActivityPlayerBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,12 +86,14 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection {
 
     private fun playMusic() {
         binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
+        musicService!!.showNotification(R.drawable.pause_icon)
         isPlaying = true
         musicService!!.mediaPlayer!!.start()
     }
 
     private fun pauseMusic() {
         binding.playPauseBtnPA.setIconResource(R.drawable.play_icon)
+        musicService!!.showNotification(R.drawable.play_icon)
         isPlaying = false
         musicService!!.mediaPlayer!!.pause()
     }
@@ -121,7 +125,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection {
         val binder =service as MusicService.MyBinder
         musicService = binder.currentService()
         createMediaPlayer()
-        musicService!!.showNotification()
+        musicService!!.showNotification(R.drawable.pause_icon)
     }
 
     override fun onServiceDisconnected(p0: ComponentName?) {
