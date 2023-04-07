@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.edu.uit.se121.meloplayer.databinding.ActivityPlayerBinding
 import com.edu.uit.se121.meloplayer.model.Music
+import com.edu.uit.se121.meloplayer.model.setSongPosition
 import com.edu.uit.se121.meloplayer.service.MusicService
 
 class PlayerActivity : AppCompatActivity(), ServiceConnection {
@@ -62,6 +63,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection {
             musicService!!.mediaPlayer!!.start()
             isPlaying = true
             binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
+            musicService!!.showNotification(R.drawable.pause_icon)
         } catch (e: java.lang.Exception) {
             return
         }
@@ -109,23 +111,10 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection {
         }
     }
 
-    private fun setSongPosition(increment: Boolean) {
-        if (increment) {
-            if (musicListPA.size - 1 == songPosition)
-                songPosition = 0
-            else ++songPosition
-        } else {
-            if (0 == songPosition)
-                songPosition = musicListPA.size - 1
-            else --songPosition
-        }
-    }
-
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
         val binder =service as MusicService.MyBinder
         musicService = binder.currentService()
         createMediaPlayer()
-        musicService!!.showNotification(R.drawable.pause_icon)
     }
 
     override fun onServiceDisconnected(p0: ComponentName?) {

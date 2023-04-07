@@ -1,6 +1,9 @@
 package com.edu.uit.se121.meloplayer.model
 
 import android.media.MediaMetadataRetriever
+import android.media.MediaPlayer
+import com.edu.uit.se121.meloplayer.PlayerActivity
+import com.edu.uit.se121.meloplayer.R
 import java.util.concurrent.TimeUnit
 
 data class Music(
@@ -28,4 +31,16 @@ fun getImgArt(path:String): ByteArray? {
     val retriever = MediaMetadataRetriever()
     retriever.setDataSource(path)
     return retriever.embeddedPicture
+}
+
+fun setSongPosition(increment: Boolean) {
+    if (increment) {
+        if (PlayerActivity.musicListPA.size - 1 == PlayerActivity.songPosition)
+            PlayerActivity.songPosition = 0
+        else ++PlayerActivity.songPosition
+    } else {
+        if (0 == PlayerActivity.songPosition)
+            PlayerActivity.songPosition = PlayerActivity.musicListPA.size - 1
+        else --PlayerActivity.songPosition
+    }
 }
