@@ -13,6 +13,7 @@ import androidx.core.app.NotificationCompat
 import com.edu.uit.se121.meloplayer.ApplicationClass
 import com.edu.uit.se121.meloplayer.PlayerActivity
 import com.edu.uit.se121.meloplayer.R
+import com.edu.uit.se121.meloplayer.model.getImgArt
 import com.edu.uit.se121.meloplayer.reciver.NotificationReciver
 
 class MusicService : Service() {
@@ -78,16 +79,21 @@ class MusicService : Service() {
             PendingIntent.FLAG_UPDATE_CURRENT
         )
 
+        val imgArt = getImgArt(PlayerActivity.musicListPA[PlayerActivity.songPosition].path)
+        val image = if (imgArt != null) {
+            BitmapFactory.decodeByteArray(imgArt, 0, imgArt.size)
+        } else {
+            BitmapFactory.decodeResource(
+                resources,
+                R.drawable.melody_icon_splash_screen
+            )
+        }
+
         val notification = NotificationCompat.Builder(baseContext, ApplicationClass.CHANNEL_ID)
             .setContentTitle(PlayerActivity.musicListPA[PlayerActivity.songPosition].title)
             .setContentText(PlayerActivity.musicListPA[PlayerActivity.songPosition].artist)
             .setSmallIcon(R.drawable.music_icon)
-            .setLargeIcon(
-                BitmapFactory.decodeResource(
-                    resources,
-                    R.drawable.melody_icon_splash_screen
-                )
-            )
+            .setLargeIcon(image)
             .setStyle(
                 androidx.media.app.NotificationCompat.MediaStyle()
                     .setMediaSession(mediaSession.sessionToken)
