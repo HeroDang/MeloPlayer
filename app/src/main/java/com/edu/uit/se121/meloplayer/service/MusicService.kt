@@ -14,6 +14,7 @@ import androidx.core.app.NotificationCompat
 import com.edu.uit.se121.meloplayer.ApplicationClass
 import com.edu.uit.se121.meloplayer.PlayerActivity
 import com.edu.uit.se121.meloplayer.R
+import com.edu.uit.se121.meloplayer.model.formatDuration
 import com.edu.uit.se121.meloplayer.model.getImgArt
 import com.edu.uit.se121.meloplayer.reciver.NotificationReciver
 
@@ -119,6 +120,10 @@ class MusicService : Service() {
             PlayerActivity.musicService!!.mediaPlayer!!.prepare()
             PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
             PlayerActivity.musicService!!.showNotification(R.drawable.pause_icon)
+            PlayerActivity.binding.tvSeekBarStart.text = formatDuration(PlayerActivity.musicService!!.mediaPlayer!!.currentPosition.toLong())
+            PlayerActivity.binding.tvSeekBarEnd.text = formatDuration(PlayerActivity.musicService!!.mediaPlayer!!.duration.toLong())
+            PlayerActivity.binding.seekBarPA.progress = 0
+            PlayerActivity.binding.seekBarPA.max = PlayerActivity.musicService!!.mediaPlayer!!.duration
         } catch (e: java.lang.Exception) {
             return
         }
