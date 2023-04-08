@@ -169,6 +169,7 @@
 
 <!--        Equalizer Button-->
         <ImageButton
+            android:id="@+id/equalizerBtnPA"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/equalizer_icon"
