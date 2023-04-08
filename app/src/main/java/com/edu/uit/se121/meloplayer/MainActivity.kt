@@ -3,6 +3,7 @@ package com.edu.uit.se121.meloplayer
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -18,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.edu.uit.se121.meloplayer.adapter.MusicAdapter
 import com.edu.uit.se121.meloplayer.databinding.ActivityMainBinding
 import com.edu.uit.se121.meloplayer.model.Music
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -71,7 +74,26 @@ class MainActivity : AppCompatActivity() {
                 R.id.navSettings -> Toast.makeText(baseContext, "Settings", Toast.LENGTH_SHORT)
                     .show()
                 R.id.navAbout -> Toast.makeText(baseContext, "About", Toast.LENGTH_SHORT).show()
-                R.id.navExit -> exitProcess(1)
+                R.id.navExit -> {
+                    val builder = MaterialAlertDialogBuilder(this)
+                    builder.setTitle("Exit")
+                        .setMessage("Do you want to close app?")
+                        .setPositiveButton("Yes") { _, _ ->
+                            if(PlayerActivity.musicService != null){
+                                @Suppress("DEPRECATION")
+                                PlayerActivity.musicService!!.stopForeground(true)
+                                PlayerActivity.musicService!!.mediaPlayer!!.release()
+                            PlayerActivity.musicService = null}
+                            exitProcess(1)
+                        }
+                        .setNegativeButton("No") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                    val customDialog = builder.create()
+                    customDialog.show()
+                    customDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED)
+                    customDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
+                }
             }
             true
         }
@@ -286,7 +308,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if(!PlayerActivity.isPlaying && PlayerActivity.musicService != null){
+        if (!PlayerActivity.isPlaying && PlayerActivity.musicService != null) {
             PlayerActivity.musicService!!.stopForeground(true)
             PlayerActivity.musicService!!.mediaPlayer!!.release()
             PlayerActivity.musicService = null
