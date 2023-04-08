@@ -17,7 +17,7 @@ import com.edu.uit.se121.meloplayer.model.formatDuration
 import com.edu.uit.se121.meloplayer.model.setSongPosition
 import com.edu.uit.se121.meloplayer.service.MusicService
 
-class PlayerActivity : AppCompatActivity(), ServiceConnection {
+class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompletionListener {
 
 
     companion object {
@@ -79,6 +79,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection {
             binding.tvSeekBarEnd.text = formatDuration(musicService!!.mediaPlayer!!.duration.toLong())
             binding.seekBarPA.progress = 0
             binding.seekBarPA.max = musicService!!.mediaPlayer!!.duration
+            musicService!!.mediaPlayer!!.setOnCompletionListener(this)
         } catch (e: java.lang.Exception) {
             return
         }
@@ -135,5 +136,15 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection {
 
     override fun onServiceDisconnected(p0: ComponentName?) {
         musicService = null
+    }
+
+    override fun onCompletion(p0: MediaPlayer?) {
+        setSongPosition(true)
+        createMediaPlayer()
+        try {
+            setLayout()
+        }catch (e: Exception){
+            return
+        }
     }
 }
