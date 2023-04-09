@@ -10,6 +10,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.edu.uit.se121.meloplayer.PlayerActivity
 import com.edu.uit.se121.meloplayer.R
 import com.edu.uit.se121.meloplayer.databinding.FragmentNowPlayingBinding
+import com.edu.uit.se121.meloplayer.model.setSongPosition
 
 class NowPlayingFragment : Fragment() {
     companion object{
@@ -25,6 +26,18 @@ class NowPlayingFragment : Fragment() {
         binding.root.visibility = View.INVISIBLE
         binding.playPauseBtnNP.setOnClickListener {
             if(PlayerActivity.isPlaying) pauseMusic() else playMusic()
+        }
+
+        binding.nextBtnNP.setOnClickListener {
+            setSongPosition(increment = true)
+            PlayerActivity.musicService!!.createMediaPlayer()
+            Glide.with(this)
+                .load(PlayerActivity.musicListPA[PlayerActivity.songPosition].artUri)
+                .apply(RequestOptions().placeholder(R.drawable.melody_icon_splash_screen).centerCrop())
+                .into(binding.songImgNP)
+            binding.songNameNP.text = PlayerActivity.musicListPA[PlayerActivity.songPosition].title
+            PlayerActivity.musicService!!.showNotification(R.drawable.pause_icon)
+            playMusic()
         }
         return view
     }
