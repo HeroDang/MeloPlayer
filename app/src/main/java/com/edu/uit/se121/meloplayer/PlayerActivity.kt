@@ -44,6 +44,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         var min15: Boolean = false
         var min30: Boolean = false
         var min60: Boolean = false
+        var nowPlayingId: String = ""
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -160,7 +161,8 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             binding.seekBarPA.progress = 0
             binding.seekBarPA.max = musicService!!.mediaPlayer!!.duration
             musicService!!.mediaPlayer!!.setOnCompletionListener(this)
-        } catch (e: java.lang.Exception) {
+            nowPlayingId = musicListPA[songPosition].id
+        } catch (e: Exception) {
             return
         }
     }
@@ -174,6 +176,8 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 binding.tvSeekBarEnd.text = formatDuration(musicService!!.mediaPlayer!!.duration.toLong())
                 binding.seekBarPA.progress = musicService!!.mediaPlayer!!.currentPosition
                 binding.seekBarPA.max = musicService!!.mediaPlayer!!.duration
+                if(isPlaying) binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
+                else binding.playPauseBtnPA.setIconResource(R.drawable.play_icon)
             }
             "MusicAdapterSearch" -> {
                 val intent = Intent(this, MusicService::class.java)
@@ -268,7 +272,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             binding.timerBtnPA.setColorFilter(ContextCompat.getColor(this, R.color.purple_500))
             min15 = true
             Thread {
-                Thread.sleep(15 * 60000)
+                Thread.sleep((15 * 60000).toLong())
                 if (min15) exitApplication()
             }.start()
 
@@ -281,7 +285,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             binding.timerBtnPA.setColorFilter(ContextCompat.getColor(this, R.color.purple_500))
             min30 = true
             Thread {
-                Thread.sleep(30 * 60000)
+                Thread.sleep((30 * 60000).toLong())
                 if (min30) exitApplication()
             }.start()
 
@@ -294,7 +298,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             binding.timerBtnPA.setColorFilter(ContextCompat.getColor(this, R.color.purple_500))
             min60 = true
             Thread {
-                Thread.sleep(60 * 60000)
+                Thread.sleep((60 * 60000).toLong())
                 if (min60) exitApplication()
             }.start()
 
