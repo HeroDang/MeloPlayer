@@ -8,13 +8,14 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.edu.uit.se121.meloplayer.MainActivity
 import com.edu.uit.se121.meloplayer.PlayerActivity
 import com.edu.uit.se121.meloplayer.R
 import com.edu.uit.se121.meloplayer.databinding.MusicViewBinding
 import com.edu.uit.se121.meloplayer.model.Music
 import com.edu.uit.se121.meloplayer.model.formatDuration
 
-class MusicAdapter(private  val context: Context, private  val musicList: ArrayList<Music>) : RecyclerView.Adapter<MusicAdapter.MyHolder>() {
+class MusicAdapter(private  val context: Context, private  var musicList: ArrayList<Music>) : RecyclerView.Adapter<MusicAdapter.MyHolder>() {
     class MyHolder(binding: MusicViewBinding) : RecyclerView.ViewHolder(binding.root) {
         val title = binding.songNameMV
         val album = binding.songAlbumMV
@@ -40,10 +41,22 @@ class MusicAdapter(private  val context: Context, private  val musicList: ArrayL
             .apply(RequestOptions().placeholder(R.drawable.melody_icon_splash_screen).centerCrop())
             .into(holder.image)
         holder.root.setOnClickListener {
-            val intent = Intent(context, PlayerActivity::class.java)
-            intent.putExtra("index", position)
-            intent.putExtra("class", "MusicAdapter")
-            ContextCompat.startActivity(context, intent, null)
+            when{
+                MainActivity.search -> sendIntent(ref = "MusicAdapterSearch", pos = position)
+                else -> sendIntent(ref = "MusicAdapter", pos = position)
+            }
         }
+    }
+
+    fun updateMusicList(searchList : ArrayList<Music>){
+        musicList = ArrayList()
+        musicList.addAll(searchList)
+        notifyDataSetChanged()
+    }
+    private fun sendIntent(ref: String, pos:Int){
+        val intent = Intent(context, PlayerActivity::class.java)
+        intent.putExtra("index", pos)
+        intent.putExtra("class", ref)
+        ContextCompat.startActivity(context, intent, null)
     }
 }
