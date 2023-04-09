@@ -9,6 +9,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.edu.uit.se121.meloplayer.ApplicationClass
 import com.edu.uit.se121.meloplayer.PlayerActivity
 import com.edu.uit.se121.meloplayer.R
+import com.edu.uit.se121.meloplayer.fragment.NowPlayingFragment
 import com.edu.uit.se121.meloplayer.model.exitApplication
 import com.edu.uit.se121.meloplayer.model.setSongPosition
 import kotlin.system.exitProcess
@@ -31,6 +32,7 @@ class NotificationReciver : BroadcastReceiver() {
         PlayerActivity.musicService!!.mediaPlayer!!.start()
         PlayerActivity.musicService!!.showNotification(R.drawable.pause_icon)
         PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
+        NowPlayingFragment.binding.playPauseBtnNP.setIconResource(R.drawable.pause_icon)
     }
 
     private fun pauseMusic() {
@@ -38,6 +40,7 @@ class NotificationReciver : BroadcastReceiver() {
         PlayerActivity.musicService!!.mediaPlayer!!.pause()
         PlayerActivity.musicService!!.showNotification(R.drawable.play_icon)
         PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.play_icon)
+        NowPlayingFragment.binding.playPauseBtnNP.setIconResource(R.drawable.play_icon)
     }
 
     private fun prevNextSong(increment: Boolean, context: Context){
