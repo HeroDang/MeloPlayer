@@ -6,14 +6,14 @@ import android.app.Service
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.media.MediaPlayer
-import android.os.Binder
-import android.os.Build
-import android.os.IBinder
+import android.os.*
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.app.NotificationCompat
 import com.edu.uit.se121.meloplayer.ApplicationClass
 import com.edu.uit.se121.meloplayer.PlayerActivity
+import com.edu.uit.se121.meloplayer.PlayerActivity.Companion.musicService
 import com.edu.uit.se121.meloplayer.R
+import com.edu.uit.se121.meloplayer.model.formatDuration
 import com.edu.uit.se121.meloplayer.model.getImgArt
 import com.edu.uit.se121.meloplayer.reciver.NotificationReciver
 
@@ -21,6 +21,7 @@ class MusicService : Service() {
     private var myBinder = MyBinder()
     var mediaPlayer: MediaPlayer? = null
     private lateinit var mediaSession: MediaSessionCompat
+    private lateinit var runnable: Runnable
 
     override fun onBind(intent: Intent?): IBinder {
         mediaSession = MediaSessionCompat(baseContext, "My Music")
@@ -119,8 +120,21 @@ class MusicService : Service() {
             PlayerActivity.musicService!!.mediaPlayer!!.prepare()
             PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
             PlayerActivity.musicService!!.showNotification(R.drawable.pause_icon)
+            PlayerActivity.binding.tvSeekBarStart.text = formatDuration(musicService!!.mediaPlayer!!.currentPosition.toLong())
+            PlayerActivity.binding.tvSeekBarEnd.text = formatDuration(musicService!!.mediaPlayer!!.duration.toLong())
+            PlayerActivity.binding.seekBarPA.progress = 0
+            PlayerActivity.binding.seekBarPA.max = PlayerActivity.musicService!!.mediaPlayer!!.duration
         } catch (e: java.lang.Exception) {
             return
         }
+    }
+
+    fun seekBarSetup(){
+        runnable = Runnable{
+            PlayerActivity.binding.tvSeekBarStart.text = formatDuration(musicService!!.mediaPlayer!!.currentPosition.toLong())
+            PlayerActivity.binding.seekBarPA.progress = mediaPlayer!!.currentPosition
+            Handler(Looper.getMainLooper()).postDelayed(runnable, 200)
+        }
+        Handler(Looper.getMainLooper()).postDelayed(runnable, 0)
     }
 }
