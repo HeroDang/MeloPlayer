@@ -9,6 +9,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.edu.uit.se121.meloplayer.ApplicationClass
 import com.edu.uit.se121.meloplayer.PlayerActivity
 import com.edu.uit.se121.meloplayer.R
+import com.edu.uit.se121.meloplayer.model.exitApplication
 import com.edu.uit.se121.meloplayer.model.setSongPosition
 import kotlin.system.exitProcess
 
@@ -20,10 +21,7 @@ class NotificationReciver : BroadcastReceiver() {
             ApplicationClass.PLAY -> if (PlayerActivity.isPlaying) pauseMusic() else playMusic()
             ApplicationClass.NEXT -> prevNextSong(increment = true, context = context!!)
             ApplicationClass.EXIT -> {
-                PlayerActivity.musicService!!.stopForeground(true)
-                PlayerActivity.musicService!!.mediaPlayer!!.release()
-                PlayerActivity.musicService = null
-                exitProcess(1)
+                exitApplication()
             }
         }
     }
