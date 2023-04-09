@@ -8,6 +8,7 @@ import android.media.MediaPlayer
 import android.media.audiofx.AudioEffect
 import android.os.Bundle
 import android.os.IBinder
+import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,7 @@ import com.edu.uit.se121.meloplayer.model.Music
 import com.edu.uit.se121.meloplayer.model.formatDuration
 import com.edu.uit.se121.meloplayer.model.setSongPosition
 import com.edu.uit.se121.meloplayer.service.MusicService
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompletionListener {
 
@@ -71,15 +73,19 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
 
         binding.equalizerBtnPA.setOnClickListener {
             try {
-                val EqIntent = Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL)
-                EqIntent.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, musicService!!.mediaPlayer!!.audioSessionId)
-                EqIntent.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, baseContext.packageName)
-                EqIntent.putExtra(AudioEffect.EXTRA_CONTENT_TYPE, AudioEffect.CONTENT_TYPE_MUSIC)
+                val eqIntent = Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL)
+                eqIntent.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, musicService!!.mediaPlayer!!.audioSessionId)
+                eqIntent.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, baseContext.packageName)
+                eqIntent.putExtra(AudioEffect.EXTRA_CONTENT_TYPE, AudioEffect.CONTENT_TYPE_MUSIC)
                 @Suppress("DEPRECATION")
-                startActivityForResult(EqIntent,13)
+                startActivityForResult(eqIntent,13)
             }catch (e: Exception){
                 Toast.makeText(this, "Equalizer feature not Supported!!", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        binding.timerBtnPA.setOnClickListener {
+            showBottomSheetDialog()
         }
     }
 
@@ -175,10 +181,29 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 13 || requestCode == RESULT_OK)
             return
+    }
+
+    private fun showBottomSheetDialog(){
+        val dialog = BottomSheetDialog(this@PlayerActivity)
+        dialog.setContentView(R.layout.bottom_sheet_dialog)
+        dialog.show()
+        dialog.findViewById<LinearLayout>(R.id.min_15)?.setOnClickListener{
+            Toast.makeText(baseContext,"Music will stop after 15 minutes",Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+        dialog.findViewById<LinearLayout>(R.id.min_30)?.setOnClickListener{
+            Toast.makeText(baseContext,"Music will stop after 30 minutes",Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+        dialog.findViewById<LinearLayout>(R.id.min_60)?.setOnClickListener{
+            Toast.makeText(baseContext,"Music will stop after 60 minutes",Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
     }
 }
