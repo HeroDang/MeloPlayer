@@ -1,10 +1,12 @@
 package com.edu.uit.se121.meloplayer.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.edu.uit.se121.meloplayer.PlayerActivity
@@ -38,6 +40,13 @@ class NowPlayingFragment : Fragment() {
             binding.songNameNP.text = PlayerActivity.musicListPA[PlayerActivity.songPosition].title
             PlayerActivity.musicService!!.showNotification(R.drawable.pause_icon)
             playMusic()
+        }
+
+        binding.root.setOnClickListener{
+            val intent = Intent(requireContext(), PlayerActivity::class.java)
+            intent.putExtra("index", PlayerActivity.songPosition)
+            intent.putExtra("class", "NowPlaying")
+            ContextCompat.startActivity(requireContext(), intent, null)
         }
         return view
     }
