@@ -1,12 +1,14 @@
 package com.edu.uit.se121.meloplayer
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.edu.uit.se121.meloplayer.adapter.MusicAdapter
 import com.edu.uit.se121.meloplayer.adapter.PlaylistViewAdapter
 import com.edu.uit.se121.meloplayer.databinding.ActivityPlaylistBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class PlaylistActivity : AppCompatActivity() {
 
@@ -30,5 +32,19 @@ class PlaylistActivity : AppCompatActivity() {
         adapter = PlaylistViewAdapter(this, tempList)
         binding.playlistRV.adapter = adapter
         binding.backBtnPLA.setOnClickListener { finish() }
+        binding.addPlaylistBtn.setOnClickListener {
+            customAlertDialog()
+        }
+    }
+
+    private fun customAlertDialog() {
+        val customDialog = LayoutInflater.from(this@PlaylistActivity)
+            .inflate(R.layout.add_playlist_dialog, binding.root, false)
+        val builder = MaterialAlertDialogBuilder(this)
+        builder.setView(customDialog)
+            .setTitle("Playlist Details")
+            .setPositiveButton("ADD"){dialog,_ ->
+                dialog.dismiss()
+            }.show()
     }
 }
