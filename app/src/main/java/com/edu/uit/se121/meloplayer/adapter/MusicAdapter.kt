@@ -15,7 +15,8 @@ import com.edu.uit.se121.meloplayer.databinding.MusicViewBinding
 import com.edu.uit.se121.meloplayer.model.Music
 import com.edu.uit.se121.meloplayer.model.formatDuration
 
-class MusicAdapter(private  val context: Context, private  var musicList: ArrayList<Music>) : RecyclerView.Adapter<MusicAdapter.MyHolder>() {
+class MusicAdapter(private val context: Context, private var musicList: ArrayList<Music>) :
+    RecyclerView.Adapter<MusicAdapter.MyHolder>() {
     class MyHolder(binding: MusicViewBinding) : RecyclerView.ViewHolder(binding.root) {
         val title = binding.songNameMV
         val album = binding.songAlbumMV
@@ -41,7 +42,7 @@ class MusicAdapter(private  val context: Context, private  var musicList: ArrayL
             .apply(RequestOptions().placeholder(R.drawable.melody_icon_splash_screen).centerCrop())
             .into(holder.image)
         holder.root.setOnClickListener {
-            when{
+            when {
                 MainActivity.search -> sendIntent(ref = "MusicAdapterSearch", pos = position)
                 musicList[position].id == PlayerActivity.nowPlayingId ->
                     sendIntent(ref = "NowPlaying", pos = PlayerActivity.songPosition)
@@ -50,12 +51,13 @@ class MusicAdapter(private  val context: Context, private  var musicList: ArrayL
         }
     }
 
-    fun updateMusicList(searchList : ArrayList<Music>){
+    fun updateMusicList(searchList: ArrayList<Music>) {
         musicList = ArrayList()
         musicList.addAll(searchList)
         notifyDataSetChanged()
     }
-    private fun sendIntent(ref: String, pos:Int){
+
+    private fun sendIntent(ref: String, pos: Int) {
         val intent = Intent(context, PlayerActivity::class.java)
         intent.putExtra("index", pos)
         intent.putExtra("class", ref)
