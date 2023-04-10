@@ -1,6 +1,8 @@
 package com.edu.uit.se121.meloplayer
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,5 +31,12 @@ class FavouriteActivity : AppCompatActivity() {
         binding.favouriteRV.layoutManager = GridLayoutManager(this, 4)
         adapter = FavouriteAdapter(this, favouriteSongs)
         binding.favouriteRV.adapter = adapter
+        if(favouriteSongs.size < 1)binding.shuffleBtnFA.visibility = View.INVISIBLE
+        binding.shuffleBtnFA.setOnClickListener {
+            val intent = Intent(this, PlayerActivity::class.java)
+            intent.putExtra("index", 0)
+            intent.putExtra("class", "FavouriteShuffle")
+            startActivity(intent)
+        }
     }
 }
