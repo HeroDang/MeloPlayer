@@ -5,13 +5,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="15dp"
     app:strokeWidth="2dp"
-    app:strokeColor="@color/cool_pink">
+    app:strokeColor="@color/cool_pink"
+    android:layout_margin="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imagePLV"
+            android:id="@+id/playlistImg"
             android:layout_width="170dp"
             android:layout_height="130dp"
             android:src="@drawable/melody_icon_splash_screen"
@@ -21,7 +22,7 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
         <TextView
-            android:id="@+id/playlistNamePLV"
+            android:id="@+id/playlistName"
             android:layout_width="130dp"
             android:layout_height="40dp"
             android:text="@string/playlist_name"
@@ -29,10 +30,15 @@
             android:textColor="@color/black"
             android:textSize="18sp"
             android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@id/imagePLV"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            app:layout_constraintTop_toBottomOf="@id/playlistImg"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent" />
+
         <ImageButton
+            android:id="@+id/playlistDeleteBtn"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:src="@drawable/delete_icon"
@@ -40,8 +46,8 @@
             android:backgroundTint="@android:color/transparent"
             android:contentDescription="@string/playlist_delete"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/playlistNamePLV"
-            app:layout_constraintTop_toBottomOf="@id/imagePLV"
+            app:layout_constraintStart_toEndOf="@id/playlistName"
+            app:layout_constraintTop_toBottomOf="@id/playlistImg"
             app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
