@@ -16,11 +16,12 @@ import com.edu.uit.se121.meloplayer.databinding.MusicViewBinding
 import com.edu.uit.se121.meloplayer.model.Music
 import com.edu.uit.se121.meloplayer.model.formatDuration
 
-class FavouriteAdapter(private val context: Context, private var musicList: ArrayList<String>) :
+class FavouriteAdapter(private val context: Context, private var musicList: ArrayList<Music>) :
     RecyclerView.Adapter<FavouriteAdapter.MyHolder>() {
     class MyHolder(binding: FavouriteViewBinding) : RecyclerView.ViewHolder(binding.root) {
         val image = binding.songImgFV
         val name = binding.songNameFV
+        val root = binding.root
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
@@ -32,13 +33,16 @@ class FavouriteAdapter(private val context: Context, private var musicList: Arra
     }
 
     override fun onBindViewHolder(holder: MyHolder, position: Int) {
-        holder.name.text = musicList[position]
-    }
-
-    private fun sendIntent(ref: String, pos: Int) {
-        val intent = Intent(context, PlayerActivity::class.java)
-        intent.putExtra("index", pos)
-        intent.putExtra("class", ref)
-        ContextCompat.startActivity(context, intent, null)
+        holder.name.text = musicList[position].title
+        Glide.with(context)
+            .load(musicList[position].artUri)
+            .apply(RequestOptions().placeholder(R.drawable.melody_icon_splash_screen).centerCrop())
+            .into(holder.image)
+        holder.root.setOnClickListener{
+            val intent = Intent(context, PlayerActivity::class.java)
+            intent.putExtra("index", position)
+            intent.putExtra("class", "FavouriteAdapter")
+            ContextCompat.startActivity(context, intent, null)
+        }
     }
 }

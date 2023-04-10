@@ -2,6 +2,7 @@ package com.edu.uit.se121.meloplayer.model
 
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
+import com.edu.uit.se121.meloplayer.FavouriteActivity
 import com.edu.uit.se121.meloplayer.PlayerActivity
 import com.edu.uit.se121.meloplayer.R
 import java.util.concurrent.TimeUnit
@@ -56,4 +57,15 @@ fun exitApplication(){
         PlayerActivity.musicService = null
     }
     exitProcess(1)
+}
+
+fun favouriteChecker(id: String): Int{
+    PlayerActivity.isFavourite = false
+    FavouriteActivity.favouriteSongs.forEachIndexed { index, music ->
+        if(id == music.id){
+            PlayerActivity.isFavourite = true
+            return index
+        }
+    }
+    return -1
 }

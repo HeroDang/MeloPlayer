@@ -11,6 +11,7 @@ import com.edu.uit.se121.meloplayer.PlayerActivity
 import com.edu.uit.se121.meloplayer.R
 import com.edu.uit.se121.meloplayer.fragment.NowPlayingFragment
 import com.edu.uit.se121.meloplayer.model.exitApplication
+import com.edu.uit.se121.meloplayer.model.favouriteChecker
 import com.edu.uit.se121.meloplayer.model.setSongPosition
 import kotlin.system.exitProcess
 
@@ -57,5 +58,8 @@ class NotificationReciver : BroadcastReceiver() {
             .into(NowPlayingFragment.binding.songImgNP)
         NowPlayingFragment.binding.songNameNP.text = PlayerActivity.musicListPA[PlayerActivity.songPosition].title
         playMusic()
+        PlayerActivity.fIndex = favouriteChecker(PlayerActivity.musicListPA[PlayerActivity.songPosition].id)
+        if(PlayerActivity.isFavourite) PlayerActivity.binding.favouriteBtnPA.setImageResource(R.drawable.favourite_icon)
+        else PlayerActivity.binding.favouriteBtnPA.setImageResource(R.drawable.favourite_empty_icon)
     }
 }
