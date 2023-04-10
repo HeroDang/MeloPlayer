@@ -5,6 +5,7 @@ import android.media.MediaPlayer
 import com.edu.uit.se121.meloplayer.PlayerActivity
 import com.edu.uit.se121.meloplayer.R
 import java.util.concurrent.TimeUnit
+import kotlin.system.exitProcess
 
 data class Music(
     val id: String,
@@ -45,4 +46,14 @@ fun setSongPosition(increment: Boolean) {
             else --PlayerActivity.songPosition
         }
     }
+}
+
+fun exitApplication(){
+    if (PlayerActivity.musicService != null) {
+        @Suppress("DEPRECATION")
+        PlayerActivity.musicService!!.stopForeground(true)
+        PlayerActivity.musicService!!.mediaPlayer!!.release()
+        PlayerActivity.musicService = null
+    }
+    exitProcess(1)
 }
