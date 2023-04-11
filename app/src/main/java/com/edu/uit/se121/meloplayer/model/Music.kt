@@ -2,6 +2,7 @@ package com.edu.uit.se121.meloplayer.model
 
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
+import com.edu.uit.se121.meloplayer.FavouriteActivity
 import com.edu.uit.se121.meloplayer.PlayerActivity
 import com.edu.uit.se121.meloplayer.R
 import java.util.concurrent.TimeUnit
@@ -17,6 +18,16 @@ data class Music(
     val artUri: String
 )
 
+class Playlist{
+    lateinit var name: String
+    lateinit var playlist: ArrayList<Music>
+    lateinit var createdBy: String
+    lateinit var createdOn: String
+}
+
+class MusicPlayList{
+    var ref: ArrayList<Playlist> = ArrayList()
+}
 
 fun formatDuration(duration: Long): String {
     val minutes = TimeUnit.MINUTES.convert(duration, TimeUnit.MILLISECONDS)
@@ -56,4 +67,15 @@ fun exitApplication(){
         PlayerActivity.musicService = null
     }
     exitProcess(1)
+}
+
+fun favouriteChecker(id: String): Int{
+    PlayerActivity.isFavourite = false
+    FavouriteActivity.favouriteSongs.forEachIndexed { index, music ->
+        if(id == music.id){
+            PlayerActivity.isFavourite = true
+            return index
+        }
+    }
+    return -1
 }

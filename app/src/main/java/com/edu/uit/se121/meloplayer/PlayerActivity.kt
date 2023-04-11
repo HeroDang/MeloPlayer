@@ -20,10 +20,7 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.edu.uit.se121.meloplayer.databinding.ActivityPlayerBinding
-import com.edu.uit.se121.meloplayer.model.Music
-import com.edu.uit.se121.meloplayer.model.exitApplication
-import com.edu.uit.se121.meloplayer.model.formatDuration
-import com.edu.uit.se121.meloplayer.model.setSongPosition
+import com.edu.uit.se121.meloplayer.model.*
 import com.edu.uit.se121.meloplayer.service.MusicService
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -45,6 +42,8 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         var min30: Boolean = false
         var min60: Boolean = false
         var nowPlayingId: String = ""
+        var isFavourite: Boolean = false
+        var  fIndex: Int = -1
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -124,9 +123,22 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(musicListPA[songPosition].path))
             startActivity(Intent.createChooser(shareIntent,"Share Music File!!"))
         }
+
+        binding.favouriteBtnPA.setOnClickListener {
+            if(isFavourite){
+                isFavourite = false
+                binding.favouriteBtnPA.setImageResource(R.drawable.favourite_empty_icon)
+                FavouriteActivity.favouriteSongs.removeAt(fIndex)
+            }else{
+                isFavourite = true
+                binding.favouriteBtnPA.setImageResource(R.drawable.favourite_icon)
+                FavouriteActivity.favouriteSongs.add(musicListPA[songPosition])
+            }
+        }
     }
 
     private fun setLayout() {
+        fIndex = favouriteChecker(musicListPA[songPosition].id)
         Glide.with(this)
             .load(musicListPA[songPosition].artUri)
             .apply(RequestOptions().placeholder(R.drawable.melody_icon_splash_screen).centerCrop())
@@ -142,6 +154,8 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         if(min15 || min30 || min60) {
             binding.timerBtnPA.setColorFilter(ContextCompat.getColor(this, R.color.purple_500))
         }
+        if(isFavourite) binding.favouriteBtnPA.setImageResource(R.drawable.favourite_icon)
+        else binding.favouriteBtnPA.setImageResource(R.drawable.favourite_empty_icon)
     }
 
     private fun createMediaPlayer() {
@@ -170,6 +184,14 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
     private fun initializeLayout() {
         songPosition = intent.getIntExtra("index", 0)
         when (intent.getStringExtra("class")) {
+            "FavouriteAdapter" -> {
+                val intent = Intent(this, MusicService::class.java)
+                bindService(intent, this, BIND_AUTO_CREATE)
+                startService(intent)
+                musicListPA = ArrayList()
+                musicListPA.addAll(FavouriteActivity.favouriteSongs)
+                setLayout()
+            }
             "NowPlaying" -> {
                 setLayout()
                 binding.tvSeekBarStart.text = formatDuration(musicService!!.mediaPlayer!!.currentPosition.toLong())
@@ -201,6 +223,15 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 startService(intent)
                 musicListPA = ArrayList()
                 musicListPA.addAll(MainActivity.MusicListMA)
+                musicListPA.shuffle()
+                setLayout()
+            }
+            "FavouriteShuffle" -> {
+                val intent = Intent(this, MusicService::class.java)
+                bindService(intent, this, BIND_AUTO_CREATE)
+                startService(intent)
+                musicListPA = ArrayList()
+                musicListPA.addAll(FavouriteActivity.favouriteSongs)
                 musicListPA.shuffle()
                 setLayout()
             }
