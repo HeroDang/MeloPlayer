@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -57,6 +58,14 @@ class MainActivity : AppCompatActivity() {
             R.style.coolPurpleNav,
             R.style.coolGreenNav,
             R.style.coolBlackNav
+        )
+
+        val currentgradient = arrayOf(
+            R.drawable.gradient_pink,
+            R.drawable.gradient_blue,
+            R.drawable.gradient_purple,
+            R.drawable.gradient_green,
+            R.drawable.gradient_black
         )
     }
 
@@ -379,6 +388,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.search_view_menu, menu)
+        //for settings gradient
+        findViewById<LinearLayout>(R.id.linearLayoutNav)?.setBackgroundResource(currentgradient[themeIndex])
         val searchView = menu?.findItem(R.id.searchView)?.actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean = true
