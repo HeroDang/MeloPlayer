@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.edu.uit.se121.meloplayer.adapter.MusicAdapter
 import com.edu.uit.se121.meloplayer.databinding.ActivityPlaylistDetailsBinding
 import com.edu.uit.se121.meloplayer.model.MusicPlayList
+import com.edu.uit.se121.meloplayer.model.checkPlaylist
 import com.edu.uit.se121.meloplayer.model.exitApplication
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.GsonBuilder
@@ -32,6 +33,8 @@ class PlaylistDetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
         @Suppress("DEPRECATION")
         currentplaylistPos = intent.extras?.get("index") as Int
+        PlaylistActivity.musicPlaylist.ref[currentplaylistPos].playlist =
+            checkPlaylist(playlist = PlaylistActivity.musicPlaylist.ref[currentplaylistPos].playlist)
         binding.playlistDetailsRV.setItemViewCacheSize(10)
         binding.playlistDetailsRV.setHasFixedSize(true)
         binding.playlistDetailsRV.layoutManager = LinearLayoutManager(this)
@@ -78,10 +81,12 @@ class PlaylistDetailsActivity : AppCompatActivity() {
         binding.moreInfoPD.text = "Total ${adapter.itemCount} Songs.\n\n" +
                 "Created On:\n${PlaylistActivity.musicPlaylist.ref[currentplaylistPos].createdOn}\n\n" +
                 "  -- ${PlaylistActivity.musicPlaylist.ref[currentplaylistPos].createdBy}"
-        if(adapter.itemCount > 0){
+        if (adapter.itemCount > 0) {
             Glide.with(this)
                 .load(PlaylistActivity.musicPlaylist.ref[currentplaylistPos].playlist[0].artUri)
-                .apply(RequestOptions().placeholder(R.drawable.melody_icon_splash_screen).centerCrop())
+                .apply(
+                    RequestOptions().placeholder(R.drawable.melody_icon_splash_screen).centerCrop()
+                )
                 .into(binding.playlistImgPD)
             binding.shuffleBtnPD.visibility = View.VISIBLE
         }

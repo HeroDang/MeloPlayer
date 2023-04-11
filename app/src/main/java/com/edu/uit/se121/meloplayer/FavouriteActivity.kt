@@ -10,6 +10,7 @@ import com.edu.uit.se121.meloplayer.adapter.FavouriteAdapter
 import com.edu.uit.se121.meloplayer.adapter.MusicAdapter
 import com.edu.uit.se121.meloplayer.databinding.ActivityFavouriteBinding
 import com.edu.uit.se121.meloplayer.model.Music
+import com.edu.uit.se121.meloplayer.model.checkPlaylist
 
 class FavouriteActivity : AppCompatActivity() {
 
@@ -25,6 +26,7 @@ class FavouriteActivity : AppCompatActivity() {
         setTheme(R.style.coolPink)
         binding = ActivityFavouriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        favouriteSongs = checkPlaylist(favouriteSongs)
         binding.backBtnFA.setOnClickListener { finish() }
         binding.favouriteRV.setHasFixedSize(true)
         binding.favouriteRV.setItemViewCacheSize(13)
