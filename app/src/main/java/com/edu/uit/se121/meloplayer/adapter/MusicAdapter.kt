@@ -15,7 +15,11 @@ import com.edu.uit.se121.meloplayer.databinding.MusicViewBinding
 import com.edu.uit.se121.meloplayer.model.Music
 import com.edu.uit.se121.meloplayer.model.formatDuration
 
-class MusicAdapter(private val context: Context, private var musicList: ArrayList<Music>) :
+class MusicAdapter(
+    private val context: Context,
+    private var musicList: ArrayList<Music>,
+    private var playlistDetails: Boolean = false
+) :
     RecyclerView.Adapter<MusicAdapter.MyHolder>() {
     class MyHolder(binding: MusicViewBinding) : RecyclerView.ViewHolder(binding.root) {
         val title = binding.songNameMV
@@ -41,12 +45,22 @@ class MusicAdapter(private val context: Context, private var musicList: ArrayLis
             .load(musicList[position].artUri)
             .apply(RequestOptions().placeholder(R.drawable.melody_icon_splash_screen).centerCrop())
             .into(holder.image)
-        holder.root.setOnClickListener {
-            when {
-                MainActivity.search -> sendIntent(ref = "MusicAdapterSearch", pos = position)
-                musicList[position].id == PlayerActivity.nowPlayingId ->
-                    sendIntent(ref = "NowPlaying", pos = PlayerActivity.songPosition)
-                else -> sendIntent(ref = "MusicAdapter", pos = position)
+
+        when{
+            playlistDetails -> {
+                holder.root.setOnClickListener {
+                    sendIntent(ref = "PlaylistDetailsAdapter", pos = position)
+                }
+            }
+            else -> {
+                holder.root.setOnClickListener {
+                    when {
+                        MainActivity.search -> sendIntent(ref = "MusicAdapterSearch", pos = position)
+                        musicList[position].id == PlayerActivity.nowPlayingId ->
+                            sendIntent(ref = "NowPlaying", pos = PlayerActivity.songPosition)
+                        else -> sendIntent(ref = "MusicAdapter", pos = position)
+                    }
+                }
             }
         }
     }
