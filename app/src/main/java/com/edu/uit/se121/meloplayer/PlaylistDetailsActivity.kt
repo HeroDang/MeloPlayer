@@ -12,8 +12,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.edu.uit.se121.meloplayer.adapter.MusicAdapter
 import com.edu.uit.se121.meloplayer.databinding.ActivityPlaylistDetailsBinding
+import com.edu.uit.se121.meloplayer.model.MusicPlayList
 import com.edu.uit.se121.meloplayer.model.exitApplication
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.gson.GsonBuilder
 
 class PlaylistDetailsActivity : AppCompatActivity() {
     lateinit var binding: ActivityPlaylistDetailsBinding
@@ -84,5 +86,10 @@ class PlaylistDetailsActivity : AppCompatActivity() {
             binding.shuffleBtnPD.visibility = View.VISIBLE
         }
         adapter.notifyDataSetChanged()
+//for storing favourites data using shared preference
+        val editor = getSharedPreferences("FAVOURITES", MODE_PRIVATE).edit()
+        val jsonStringPlaylist = GsonBuilder().create().toJson(PlaylistActivity.musicPlaylist)
+        editor.putString("MusicPlaylist", jsonStringPlaylist)
+        editor.apply()
     }
 }

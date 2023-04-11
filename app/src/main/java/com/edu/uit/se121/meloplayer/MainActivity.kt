@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.edu.uit.se121.meloplayer.adapter.MusicAdapter
 import com.edu.uit.se121.meloplayer.databinding.ActivityMainBinding
 import com.edu.uit.se121.meloplayer.model.Music
+import com.edu.uit.se121.meloplayer.model.MusicPlayList
 import com.edu.uit.se121.meloplayer.model.exitApplication
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
@@ -38,8 +39,8 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         lateinit var MusicListMA: ArrayList<Music>
-        lateinit var musicListSearch : ArrayList<Music>
-        var search : Boolean = false
+        lateinit var musicListSearch: ArrayList<Music>
+        var search: Boolean = false
     }
 
     //    @RequiresApi(Build.VERSION_CODES.R)
@@ -62,10 +63,18 @@ class MainActivity : AppCompatActivity() {
             FavouriteActivity.favouriteSongs = ArrayList()
             val editor = getSharedPreferences("FAVOURITES", MODE_PRIVATE)
             val jsonString = editor.getString("FavouriteSongs", null)
-            val typeToken = object : TypeToken<ArrayList<Music>>(){}.type
-            if(jsonString != null){
-                val data: ArrayList<Music> =  GsonBuilder().create().fromJson(jsonString, typeToken)
+            val typeToken = object : TypeToken<ArrayList<Music>>() {}.type
+            if (jsonString != null) {
+                val data: ArrayList<Music> = GsonBuilder().create().fromJson(jsonString, typeToken)
                 FavouriteActivity.favouriteSongs.addAll(data)
+            }
+
+            PlaylistActivity.musicPlaylist = MusicPlayList()
+            val jsonStringPlaylist = editor.getString("MusicPlaylist", null)
+            if (jsonStringPlaylist != null) {
+                val dataPlaylist: MusicPlayList =
+                    GsonBuilder().create().fromJson(jsonStringPlaylist, MusicPlayList::class.java)
+                PlaylistActivity.musicPlaylist = dataPlaylist
             }
         }
 
@@ -333,26 +342,28 @@ class MainActivity : AppCompatActivity() {
         //for storing favourites data using shared prefeence
         val editor = getSharedPreferences("FAVOURITES", MODE_PRIVATE).edit()
         val jsonString = GsonBuilder().create().toJson(FavouriteActivity.favouriteSongs)
-        editor.putString("FavouriteSongs",jsonString)
+        editor.putString("FavouriteSongs", jsonString)
+        val jsonStringPlaylist = GsonBuilder().create().toJson(PlaylistActivity.musicPlaylist)
+        editor.putString("MusicPlaylist", jsonStringPlaylist)
         editor.apply()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.search_view_menu, menu)
         val searchView = menu?.findItem(R.id.searchView)?.actionView as SearchView
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean = true
             override fun onQueryTextChange(newText: String?): Boolean {
                 musicListSearch = ArrayList()
-                if(newText != null){
+                if (newText != null) {
                     val userInput = newText.lowercase()
                     for (song in MusicListMA)
-                        if(song.title.lowercase().contains(userInput))
+                        if (song.title.lowercase().contains(userInput))
                             musicListSearch.add(song)
                     search = true
                     musicAdapter.updateMusicList(searchList = musicListSearch)
                 }
-                return  true
+                return true
             }
 
         })
