@@ -42,14 +42,34 @@ class MainActivity : AppCompatActivity() {
         lateinit var MusicListMA: ArrayList<Music>
         lateinit var musicListSearch: ArrayList<Music>
         var search: Boolean = false
+        var themeIndex: Int = 0
+        val currentTheme = arrayOf(
+            R.style.coolPink,
+            R.style.coolBlue,
+            R.style.coolPurple,
+            R.style.coolGreen,
+            R.style.coolBlack
+        )
+
+        val currentThemeNav = arrayOf(
+            R.style.coolPinkNav,
+            R.style.coolBlueNav,
+            R.style.coolPurpleNav,
+            R.style.coolGreenNav,
+            R.style.coolBlackNav
+        )
     }
 
     //    @RequiresApi(Build.VERSION_CODES.R)
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val themeEditor = getSharedPreferences("THEMES", MODE_PRIVATE)
+        themeIndex = themeEditor.getInt("themeIndex", 0)
+
 //        requestRuntimePermission()
-        setTheme(R.style.coolPinkNav)
+        setTheme(currentThemeNav[themeIndex])
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -97,8 +117,18 @@ class MainActivity : AppCompatActivity() {
         }
         binding.navView.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.navFeedback -> startActivity(Intent(this@MainActivity, FeedbackActivity::class.java))
-                R.id.navSettings -> startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
+                R.id.navFeedback -> startActivity(
+                    Intent(
+                        this@MainActivity,
+                        FeedbackActivity::class.java
+                    )
+                )
+                R.id.navSettings -> startActivity(
+                    Intent(
+                        this@MainActivity,
+                        SettingsActivity::class.java
+                    )
+                )
                 R.id.navAbout -> startActivity(Intent(this@MainActivity, AboutActivity::class.java))
                 R.id.navExit -> {
                     val builder = MaterialAlertDialogBuilder(this)

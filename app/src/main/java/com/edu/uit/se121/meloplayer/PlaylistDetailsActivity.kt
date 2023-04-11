@@ -28,13 +28,15 @@ class PlaylistDetailsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.coolPink)
+        setTheme(MainActivity.currentTheme[MainActivity.themeIndex])
         binding = ActivityPlaylistDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         @Suppress("DEPRECATION")
         currentplaylistPos = intent.extras?.get("index") as Int
-        PlaylistActivity.musicPlaylist.ref[currentplaylistPos].playlist =
-            checkPlaylist(playlist = PlaylistActivity.musicPlaylist.ref[currentplaylistPos].playlist)
+        try {
+            PlaylistActivity.musicPlaylist.ref[currentplaylistPos].playlist =
+                checkPlaylist(playlist = PlaylistActivity.musicPlaylist.ref[currentplaylistPos].playlist)
+        }catch (e: Exception){}
         binding.playlistDetailsRV.setItemViewCacheSize(10)
         binding.playlistDetailsRV.setHasFixedSize(true)
         binding.playlistDetailsRV.layoutManager = LinearLayoutManager(this)

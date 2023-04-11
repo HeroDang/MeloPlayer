@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.edu.uit.se121.meloplayer.MainActivity
 import com.edu.uit.se121.meloplayer.PlayerActivity
 import com.edu.uit.se121.meloplayer.R
 import com.edu.uit.se121.meloplayer.databinding.FragmentNowPlayingBinding
@@ -23,6 +24,7 @@ class NowPlayingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        requireContext().theme.applyStyle(MainActivity.currentTheme[MainActivity.themeIndex], true)
         val view = inflater.inflate(R.layout.fragment_now_playing, container, false)
         binding = FragmentNowPlayingBinding.bind(view)
         binding.root.visibility = View.INVISIBLE

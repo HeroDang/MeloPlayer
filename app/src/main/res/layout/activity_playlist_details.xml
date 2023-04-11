@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:background="@color/cool_pink"
+        android:background="?attr/themeColor"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +50,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/linearLayout"
-        android:background="@color/cool_pink">
+        android:background="?attr/themeColor">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/playlistImgPD"
@@ -87,18 +87,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white"
+        android:visibility="invisible"
         app:icon="@drawable/shuffle_icon"
         app:iconSize="35dp"
-        app:iconTint="@color/cool_pink"
+        app:iconTint="?attr/themeColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.9"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.9"
-        app:strokeColor="@color/cool_pink"
-        app:strokeWidth="2dp"
-        android:visibility="invisible"/>
+        app:strokeColor="?attr/themeColor"
+        app:strokeWidth="2dp" />
 
     <!--        for button-->
     <LinearLayout
