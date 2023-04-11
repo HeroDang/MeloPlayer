@@ -10,6 +10,7 @@ import android.os.*
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.app.NotificationCompat
 import com.edu.uit.se121.meloplayer.ApplicationClass
+import com.edu.uit.se121.meloplayer.MainActivity
 import com.edu.uit.se121.meloplayer.PlayerActivity
 import com.edu.uit.se121.meloplayer.PlayerActivity.Companion.musicService
 import com.edu.uit.se121.meloplayer.R
@@ -36,6 +37,8 @@ class MusicService : Service() {
 
     @SuppressLint("UnspecifiedImmutableFlag")
     fun showNotification(playPauseBtn: Int) {
+        val intent = Intent(baseContext, MainActivity::class.java)
+        val contentIntent = PendingIntent.getActivity(this,0,intent, 0)
 
         val prevIntent = Intent(
             baseContext,
@@ -92,6 +95,7 @@ class MusicService : Service() {
         }
 
         val notification = NotificationCompat.Builder(baseContext, ApplicationClass.CHANNEL_ID)
+            .setContentIntent(contentIntent)
             .setContentTitle(PlayerActivity.musicListPA[PlayerActivity.songPosition].title)
             .setContentText(PlayerActivity.musicListPA[PlayerActivity.songPosition].artist)
             .setSmallIcon(R.drawable.music_icon)
