@@ -1,5 +1,6 @@
 package com.edu.uit.se121.meloplayer.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -8,9 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.edu.uit.se121.meloplayer.MainActivity
-import com.edu.uit.se121.meloplayer.PlayerActivity
-import com.edu.uit.se121.meloplayer.R
+import com.edu.uit.se121.meloplayer.*
 import com.edu.uit.se121.meloplayer.databinding.MusicViewBinding
 import com.edu.uit.se121.meloplayer.model.Music
 import com.edu.uit.se121.meloplayer.model.formatDuration
@@ -18,7 +17,8 @@ import com.edu.uit.se121.meloplayer.model.formatDuration
 class MusicAdapter(
     private val context: Context,
     private var musicList: ArrayList<Music>,
-    private var playlistDetails: Boolean = false
+    private val playlistDetails: Boolean = false,
+    private val selectionActivity: Boolean = false
 ) :
     RecyclerView.Adapter<MusicAdapter.MyHolder>() {
     class MyHolder(binding: MusicViewBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -52,6 +52,14 @@ class MusicAdapter(
                     sendIntent(ref = "PlaylistDetailsAdapter", pos = position)
                 }
             }
+            selectionActivity -> {
+                holder.root.setOnClickListener {
+                    if(addSong(musicList[position]))
+                        holder.root.setBackgroundColor(ContextCompat.getColor(context, R.color.cool_pink))
+                    else
+                        holder.root.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+                }
+            }
             else -> {
                 holder.root.setOnClickListener {
                     when {
@@ -65,6 +73,7 @@ class MusicAdapter(
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateMusicList(searchList: ArrayList<Music>) {
         musicList = ArrayList()
         musicList.addAll(searchList)
@@ -76,5 +85,22 @@ class MusicAdapter(
         intent.putExtra("index", pos)
         intent.putExtra("class", ref)
         ContextCompat.startActivity(context, intent, null)
+    }
+
+    private fun addSong(song: Music): Boolean{
+        PlaylistActivity.musicPlaylist.ref[PlaylistDetailsActivity.currentplaylistPos].playlist.forEachIndexed { index, music ->
+            if(song.id == music.id){
+                PlaylistActivity.musicPlaylist.ref[PlaylistDetailsActivity.currentplaylistPos].playlist.removeAt(index)
+                return false
+            }
+        }
+        PlaylistActivity.musicPlaylist.ref[PlaylistDetailsActivity.currentplaylistPos].playlist.add(song)
+        return true
+    }
+
+    fun refreshPlaylist(){
+        musicList = ArrayList()
+        musicList = PlaylistActivity.musicPlaylist.ref[PlaylistDetailsActivity.currentplaylistPos].playlist
+        notifyDataSetChanged()
     }
 }
