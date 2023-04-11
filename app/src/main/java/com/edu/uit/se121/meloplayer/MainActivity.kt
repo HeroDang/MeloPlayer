@@ -1,6 +1,7 @@
 package com.edu.uit.se121.meloplayer
 
 import android.annotation.SuppressLint
+import android.app.ProgressDialog.show
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -96,11 +97,9 @@ class MainActivity : AppCompatActivity() {
         }
         binding.navView.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.navFeedback -> Toast.makeText(baseContext, "Feedback", Toast.LENGTH_SHORT)
-                    .show()
-                R.id.navSettings -> Toast.makeText(baseContext, "Settings", Toast.LENGTH_SHORT)
-                    .show()
-                R.id.navAbout -> Toast.makeText(baseContext, "About", Toast.LENGTH_SHORT).show()
+                R.id.navFeedback -> startActivity(Intent(this@MainActivity, FeedbackActivity::class.java))
+                R.id.navSettings -> startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
+                R.id.navAbout -> startActivity(Intent(this@MainActivity, AboutActivity::class.java))
                 R.id.navExit -> {
                     val builder = MaterialAlertDialogBuilder(this)
                     builder.setTitle("Exit")
