@@ -1,6 +1,7 @@
 package com.edu.uit.se121.meloplayer
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -36,6 +37,15 @@ class PlaylistDetailsActivity : AppCompatActivity() {
         )
         binding.playlistDetailsRV.adapter = adapter
         binding.backBtnPD.setOnClickListener { finish() }
+        binding.shuffleBtnPD.setOnClickListener {
+            val intent = Intent(this, PlayerActivity::class.java)
+            intent.putExtra("index", 0)
+            intent.putExtra("class", "PlaylistDetailsShuffle")
+            startActivity(intent)
+        }
+        binding.addBtnPD.setOnClickListener {
+            startActivity(Intent(this, SelectionActivity::class.java))
+        }
     }
 
     @SuppressLint("SetTextI18n")
