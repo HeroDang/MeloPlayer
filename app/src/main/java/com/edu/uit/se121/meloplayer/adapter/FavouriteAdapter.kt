@@ -1,5 +1,6 @@
 package com.edu.uit.se121.meloplayer.adapter
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -84,5 +85,12 @@ class FavouriteAdapter(
                 ContextCompat.startActivity(context, intent, null)
             }
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateFavourites(newList: ArrayList<Music>){
+        musicList = ArrayList()
+        musicList.addAll(newList)
+        notifyDataSetChanged()
     }
 }

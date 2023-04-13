@@ -75,7 +75,6 @@ class NowPlayingFragment : Fragment() {
         PlayerActivity.musicService!!.mediaPlayer!!.start()
         binding.playPauseBtnNP.setIconResource(R.drawable.pause_icon)
         PlayerActivity.musicService!!.showNotification(R.drawable.pause_icon)
-        PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
     }
 
     private fun pauseMusic(){
@@ -83,6 +82,5 @@ class NowPlayingFragment : Fragment() {
         PlayerActivity.musicService!!.mediaPlayer!!.pause()
         binding.playPauseBtnNP.setIconResource(R.drawable.play_icon)
         PlayerActivity.musicService!!.showNotification(R.drawable.play_icon)
-        PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.play_icon)
     }
 }

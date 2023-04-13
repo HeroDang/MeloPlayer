@@ -1,5 +1,6 @@
 package com.edu.uit.se121.meloplayer
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -19,6 +20,7 @@ class FavouriteActivity : AppCompatActivity() {
 
     companion object{
         var favouriteSongs: ArrayList<Music> = ArrayList()
+        var favouritesChanged: Boolean = false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,12 +35,24 @@ class FavouriteActivity : AppCompatActivity() {
         binding.favouriteRV.layoutManager = GridLayoutManager(this, 4)
         adapter = FavouriteAdapter(this, favouriteSongs)
         binding.favouriteRV.adapter = adapter
+
+        favouritesChanged = false
+
         if(favouriteSongs.size < 1)binding.shuffleBtnFA.visibility = View.INVISIBLE
         binding.shuffleBtnFA.setOnClickListener {
             val intent = Intent(this, PlayerActivity::class.java)
             intent.putExtra("index", 0)
             intent.putExtra("class", "FavouriteShuffle")
             startActivity(intent)
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onResume() {
+        super.onResume()
+        if(favouritesChanged) {
+            adapter.updateFavourites(favouriteSongs)
+            favouritesChanged = false
         }
     }
 }

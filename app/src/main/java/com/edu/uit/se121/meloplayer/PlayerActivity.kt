@@ -181,6 +181,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 binding.favouriteBtnPA.setImageResource(R.drawable.favourite_icon)
                 FavouriteActivity.favouriteSongs.add(musicListPA[songPosition])
             }
+            FavouriteActivity.favouritesChanged = true
         }
     }
 
