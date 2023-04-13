@@ -146,12 +146,12 @@ class MainActivity : AppCompatActivity() {
 
         binding.navView.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.navFeedback -> startActivity(
-                    Intent(
-                        this@MainActivity,
-                        FeedbackActivity::class.java
-                    )
-                )
+//                R.id.navFeedback -> startActivity(
+//                    Intent(
+//                        this@MainActivity,
+//                        FeedbackActivity::class.java
+//                    )
+//                )
                 R.id.navSettings -> startActivity(
                     Intent(
                         this@MainActivity,
