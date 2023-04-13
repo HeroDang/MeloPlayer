@@ -83,10 +83,17 @@ fun favouriteChecker(id: String): Int{
 }
 
 fun checkPlaylist(playlist: ArrayList<Music>) : ArrayList<Music>{
-    playlist.forEachIndexed { index, music ->
+    val iter = playlist.iterator()
+    while(iter.hasNext()){
+        val music = iter.next()
         val file = File(music.path)
         if(!file.exists())
-            playlist.removeAt(index)
+            playlist.remove(music)
     }
+//    playlist.forEachIndexed { index, music ->
+//        val file = File(music.path)
+//        if(!file.exists())
+//            playlist.removeAt(index)
+//    }
     return playlist
 }
