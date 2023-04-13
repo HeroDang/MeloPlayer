@@ -1,5 +1,6 @@
 package com.edu.uit.se121.meloplayer.fragment
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.edu.uit.se121.meloplayer.MainActivity
 import com.edu.uit.se121.meloplayer.PlayerActivity
 import com.edu.uit.se121.meloplayer.R
 import com.edu.uit.se121.meloplayer.databinding.FragmentNowPlayingBinding
@@ -16,6 +18,7 @@ import com.edu.uit.se121.meloplayer.model.setSongPosition
 
 class NowPlayingFragment : Fragment() {
     companion object{
+        @SuppressLint("StaticFieldLeak")
         lateinit var binding: FragmentNowPlayingBinding
     }
 
@@ -23,6 +26,7 @@ class NowPlayingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        requireContext().theme.applyStyle(MainActivity.currentTheme[MainActivity.themeIndex], true)
         val view = inflater.inflate(R.layout.fragment_now_playing, container, false)
         binding = FragmentNowPlayingBinding.bind(view)
         binding.root.visibility = View.INVISIBLE
@@ -38,7 +42,7 @@ class NowPlayingFragment : Fragment() {
                 .apply(RequestOptions().placeholder(R.drawable.melody_icon_splash_screen).centerCrop())
                 .into(binding.songImgNP)
             binding.songNameNP.text = PlayerActivity.musicListPA[PlayerActivity.songPosition].title
-            PlayerActivity.musicService!!.showNotification(R.drawable.pause_icon)
+            PlayerActivity.musicService!!.showNotification(R.drawable.pause_icon, 1F)
             playMusic()
         }
 
@@ -69,7 +73,7 @@ class NowPlayingFragment : Fragment() {
     private fun playMusic(){
         PlayerActivity.musicService!!.mediaPlayer!!.start()
         binding.playPauseBtnNP.setIconResource(R.drawable.pause_icon)
-        PlayerActivity.musicService!!.showNotification(R.drawable.pause_icon)
+        PlayerActivity.musicService!!.showNotification(R.drawable.pause_icon, 1F)
         PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
         PlayerActivity.isPlaying = true
     }
@@ -77,7 +81,7 @@ class NowPlayingFragment : Fragment() {
     private fun pauseMusic(){
         PlayerActivity.musicService!!.mediaPlayer!!.pause()
         binding.playPauseBtnNP.setIconResource(R.drawable.play_icon)
-        PlayerActivity.musicService!!.showNotification(R.drawable.play_icon)
+        PlayerActivity.musicService!!.showNotification(R.drawable.play_icon, 0F)
         PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.play_icon)
         PlayerActivity.isPlaying = false
     }

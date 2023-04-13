@@ -1,6 +1,7 @@
 package com.edu.uit.se121.meloplayer
 
 import android.annotation.SuppressLint
+import android.app.ProgressDialog.show
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -10,6 +11,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -22,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.edu.uit.se121.meloplayer.adapter.MusicAdapter
 import com.edu.uit.se121.meloplayer.databinding.ActivityMainBinding
 import com.edu.uit.se121.meloplayer.model.Music
+import com.edu.uit.se121.meloplayer.model.MusicPlayList
 import com.edu.uit.se121.meloplayer.model.exitApplication
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
@@ -38,16 +41,51 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         lateinit var MusicListMA: ArrayList<Music>
-        lateinit var musicListSearch : ArrayList<Music>
-        var search : Boolean = false
+        lateinit var musicListSearch: ArrayList<Music>
+        var search: Boolean = false
+        var themeIndex: Int = 0
+        val currentTheme = arrayOf(
+            R.style.coolPink,
+            R.style.coolBlue,
+            R.style.coolPurple,
+            R.style.coolGreen,
+            R.style.coolBlack
+        )
+
+        val currentThemeNav = arrayOf(
+            R.style.coolPinkNav,
+            R.style.coolBlueNav,
+            R.style.coolPurpleNav,
+            R.style.coolGreenNav,
+            R.style.coolBlackNav
+        )
+
+        val currentgradient = arrayOf(
+            R.drawable.gradient_pink,
+            R.drawable.gradient_blue,
+            R.drawable.gradient_purple,
+            R.drawable.gradient_green,
+            R.drawable.gradient_black
+        )
+
+        var sortOrder: Int = 0
+        val sortingList = arrayOf(
+            MediaStore.Audio.Media.DATE_ADDED + " DESC",
+            MediaStore.Audio.Media.TITLE,
+            MediaStore.Audio.Media.SIZE + " DESC"
+        )
     }
 
     //    @RequiresApi(Build.VERSION_CODES.R)
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val themeEditor = getSharedPreferences("THEMES", MODE_PRIVATE)
+        themeIndex = themeEditor.getInt("themeIndex", 0)
+
 //        requestRuntimePermission()
-        setTheme(R.style.coolPinkNav)
+        setTheme(currentThemeNav[themeIndex])
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -62,10 +100,18 @@ class MainActivity : AppCompatActivity() {
             FavouriteActivity.favouriteSongs = ArrayList()
             val editor = getSharedPreferences("FAVOURITES", MODE_PRIVATE)
             val jsonString = editor.getString("FavouriteSongs", null)
-            val typeToken = object : TypeToken<ArrayList<Music>>(){}.type
-            if(jsonString != null){
-                val data: ArrayList<Music> =  GsonBuilder().create().fromJson(jsonString, typeToken)
+            val typeToken = object : TypeToken<ArrayList<Music>>() {}.type
+            if (jsonString != null) {
+                val data: ArrayList<Music> = GsonBuilder().create().fromJson(jsonString, typeToken)
                 FavouriteActivity.favouriteSongs.addAll(data)
+            }
+
+            PlaylistActivity.musicPlaylist = MusicPlayList()
+            val jsonStringPlaylist = editor.getString("MusicPlaylist", null)
+            if (jsonStringPlaylist != null) {
+                val dataPlaylist: MusicPlayList =
+                    GsonBuilder().create().fromJson(jsonStringPlaylist, MusicPlayList::class.java)
+                PlaylistActivity.musicPlaylist = dataPlaylist
             }
         }
 
@@ -87,11 +133,19 @@ class MainActivity : AppCompatActivity() {
         }
         binding.navView.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.navFeedback -> Toast.makeText(baseContext, "Feedback", Toast.LENGTH_SHORT)
-                    .show()
-                R.id.navSettings -> Toast.makeText(baseContext, "Settings", Toast.LENGTH_SHORT)
-                    .show()
-                R.id.navAbout -> Toast.makeText(baseContext, "About", Toast.LENGTH_SHORT).show()
+                R.id.navFeedback -> startActivity(
+                    Intent(
+                        this@MainActivity,
+                        FeedbackActivity::class.java
+                    )
+                )
+                R.id.navSettings -> startActivity(
+                    Intent(
+                        this@MainActivity,
+                        SettingsActivity::class.java
+                    )
+                )
+                R.id.navAbout -> startActivity(Intent(this@MainActivity, AboutActivity::class.java))
                 R.id.navExit -> {
                     val builder = MaterialAlertDialogBuilder(this)
                     builder.setTitle("Exit")
@@ -251,6 +305,8 @@ class MainActivity : AppCompatActivity() {
 //            else -> requestRuntimePermission()
 //        }
         search = false
+        val sortEditor = getSharedPreferences("SORTING", MODE_PRIVATE)
+        sortOrder = sortEditor.getInt("sortOrder", 0)
         MusicListMA = getAllAudio()
         binding.musicRV.setHasFixedSize(true)
         binding.musicRV.setItemViewCacheSize(13)
@@ -279,7 +335,7 @@ class MainActivity : AppCompatActivity() {
             projection,
             selection,
             null,
-            MediaStore.Audio.Media.DATE_ADDED + " DESC",
+            sortingList[sortOrder],
             null
         )
 
@@ -333,26 +389,38 @@ class MainActivity : AppCompatActivity() {
         //for storing favourites data using shared prefeence
         val editor = getSharedPreferences("FAVOURITES", MODE_PRIVATE).edit()
         val jsonString = GsonBuilder().create().toJson(FavouriteActivity.favouriteSongs)
-        editor.putString("FavouriteSongs",jsonString)
+        editor.putString("FavouriteSongs", jsonString)
+        val jsonStringPlaylist = GsonBuilder().create().toJson(PlaylistActivity.musicPlaylist)
+        editor.putString("MusicPlaylist", jsonStringPlaylist)
         editor.apply()
+        //for sorting
+        val sortEditor = getSharedPreferences("SORTING", MODE_PRIVATE)
+        val sortValue = sortEditor.getInt("sortOrder", 0)
+        if(sortOrder != sortValue){
+            sortOrder = sortValue
+            MusicListMA = getAllAudio()
+            musicAdapter.updateMusicList(MusicListMA)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.search_view_menu, menu)
+        //for settings gradient
+        findViewById<LinearLayout>(R.id.linearLayoutNav)?.setBackgroundResource(currentgradient[themeIndex])
         val searchView = menu?.findItem(R.id.searchView)?.actionView as SearchView
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean = true
             override fun onQueryTextChange(newText: String?): Boolean {
                 musicListSearch = ArrayList()
-                if(newText != null){
+                if (newText != null) {
                     val userInput = newText.lowercase()
                     for (song in MusicListMA)
-                        if(song.title.lowercase().contains(userInput))
+                        if (song.title.lowercase().contains(userInput))
                             musicListSearch.add(song)
                     search = true
                     musicAdapter.updateMusicList(searchList = musicListSearch)
                 }
-                return  true
+                return true
             }
 
         })

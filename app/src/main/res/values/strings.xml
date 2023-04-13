@@ -8,7 +8,7 @@
     <string name="song_name">Song Name</string>
     <string name="back_btn">Back</string>
     <string name="start_tv">00:00</string>
-    <string name="end_tv">Loading...</string>
+    <string name="end_tv">Loading…</string>
     <string name="repeat_btn">Repeat</string>
     <string name="equalizer_btn">Equalizer</string>
     <string name="timer_btn">Timer</string>
@@ -32,4 +32,13 @@
     <string name="user_name">Your Name</string>
     <string name="add_song">Add</string>
     <string name="remove_all">Remove All</string>
+    <string name="search_song">Search Song</string>
+    <string name="topic_feedback">Topic i.e. Suggestion, Error, etc.</string>
+    <string name="email_feedback">Email Address(Optional)</string>
+    <string name="send">Send</string>
+    <string name="set_theme">Set Theme</string>
+    <string name="sort_by">Sort By</string>
+    <string name="version_name">Version Name</string>
+    <string name="title_song">Title</string>
+    <string name="artist_song">Artist</string>
 </resources>

@@ -9,8 +9,11 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.edu.uit.se121.meloplayer.PlaylistActivity
 import com.edu.uit.se121.meloplayer.PlaylistDetailsActivity
+import com.edu.uit.se121.meloplayer.R
 import com.edu.uit.se121.meloplayer.databinding.PlaylistViewBinding
 import com.edu.uit.se121.meloplayer.model.Playlist
 import com.edu.uit.se121.meloplayer.model.exitApplication
@@ -58,6 +61,13 @@ class PlaylistViewAdapter(private val context: Context, private var playlistList
             val intent = Intent(context, PlaylistDetailsActivity::class.java)
             intent.putExtra("index", position)
             ContextCompat.startActivity(context, intent, null)
+        }
+
+        if(PlaylistActivity.musicPlaylist.ref[position].playlist.size > 0){
+            Glide.with(context)
+                .load(PlaylistActivity.musicPlaylist.ref[position].playlist[0].artUri)
+                .apply(RequestOptions().placeholder(R.drawable.melody_icon_splash_screen).centerCrop())
+                .into(holder.image)
         }
     }
 

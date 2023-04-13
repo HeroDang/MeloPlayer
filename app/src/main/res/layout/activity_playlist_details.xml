@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:background="@color/cool_pink"
+        android:background="?attr/themeColor"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +37,8 @@
             android:text="@string/playlist_btn"
             android:textColor="@color/white"
             android:textSize="25sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:singleLine="true"/>
     </LinearLayout>
 
     <LinearLayout
@@ -48,7 +49,8 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout">
+        app:layout_constraintTop_toBottomOf="@id/linearLayout"
+        android:background="?attr/themeColor">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/playlistImgPD"
@@ -57,10 +59,10 @@
             android:src="@drawable/melody_icon_splash_screen" />
 
         <TextView
+            android:id="@+id/moreInfoPD"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="5dp"
-            android:background="@color/cool_pink"
             android:gravity="center|start"
             android:text="@string/playlist_name"
             android:textColor="@color/white"
@@ -85,16 +87,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white"
+        android:visibility="invisible"
         app:icon="@drawable/shuffle_icon"
         app:iconSize="35dp"
-        app:iconTint="@color/cool_pink"
+        app:iconTint="?attr/themeColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.9"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.9"
-        app:strokeColor="@color/cool_pink"
+        app:strokeColor="?attr/themeColor"
         app:strokeWidth="2dp" />
 
     <!--        for button-->
