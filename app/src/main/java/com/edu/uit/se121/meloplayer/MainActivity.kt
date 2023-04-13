@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.ProgressDialog.show
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
@@ -94,6 +95,11 @@ class MainActivity : AppCompatActivity() {
         binding.root.addDrawerListener(toggle)
         toggle.syncState()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        //checking for dark theme
+        if (themeIndex == 4 && resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO)
+            Toast.makeText(this, "Black Theme Works Best in Dark Mode!!", Toast.LENGTH_LONG).show()
+
         if (requestRuntimePermission()) {
             initializeLayout()
             //for retrieving favourites data using shared preference
@@ -396,7 +402,7 @@ class MainActivity : AppCompatActivity() {
         //for sorting
         val sortEditor = getSharedPreferences("SORTING", MODE_PRIVATE)
         val sortValue = sortEditor.getInt("sortOrder", 0)
-        if(sortOrder != sortValue){
+        if (sortOrder != sortValue) {
             sortOrder = sortValue
             MusicListMA = getAllAudio()
             musicAdapter.updateMusicList(MusicListMA)

@@ -42,7 +42,7 @@ class NowPlayingFragment : Fragment() {
                 .apply(RequestOptions().placeholder(R.drawable.melody_icon_splash_screen).centerCrop())
                 .into(binding.songImgNP)
             binding.songNameNP.text = PlayerActivity.musicListPA[PlayerActivity.songPosition].title
-            PlayerActivity.musicService!!.showNotification(R.drawable.pause_icon, 1F)
+            PlayerActivity.musicService!!.showNotification(R.drawable.pause_icon)
             playMusic()
         }
 
@@ -71,18 +71,18 @@ class NowPlayingFragment : Fragment() {
     }
 
     private fun playMusic(){
+        PlayerActivity.isPlaying = true
         PlayerActivity.musicService!!.mediaPlayer!!.start()
         binding.playPauseBtnNP.setIconResource(R.drawable.pause_icon)
-        PlayerActivity.musicService!!.showNotification(R.drawable.pause_icon, 1F)
+        PlayerActivity.musicService!!.showNotification(R.drawable.pause_icon)
         PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
-        PlayerActivity.isPlaying = true
     }
 
     private fun pauseMusic(){
+        PlayerActivity.isPlaying = false
         PlayerActivity.musicService!!.mediaPlayer!!.pause()
         binding.playPauseBtnNP.setIconResource(R.drawable.play_icon)
-        PlayerActivity.musicService!!.showNotification(R.drawable.play_icon, 0F)
+        PlayerActivity.musicService!!.showNotification(R.drawable.play_icon)
         PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.play_icon)
-        PlayerActivity.isPlaying = false
     }
 }

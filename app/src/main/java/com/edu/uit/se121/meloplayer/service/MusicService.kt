@@ -29,6 +29,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
     private lateinit var mediaSession: MediaSessionCompat
     private lateinit var runnable: Runnable
     lateinit var audioManager: AudioManager
+    lateinit var playbackState: PlaybackStateCompat
 
     override fun onBind(intent: Intent?): IBinder {
         mediaSession = MediaSessionCompat(baseContext, "My Music")
@@ -42,7 +43,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
     }
 
     @SuppressLint("UnspecifiedImmutableFlag", "RemoteViewLayout")
-    fun showNotification(playPauseBtn: Int, playback: Float) {
+    fun showNotification(playPauseBtn: Int) {
         val intent = Intent(baseContext, MainActivity::class.java)
         val contentIntent = PendingIntent.getActivity(
             this,
@@ -126,7 +127,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
             .build()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val playbackSpeed = if(PlayerActivity.isPlaying) 0F else 1F
+            val playbackSpeed = if(PlayerActivity.isPlaying) 1F else 0F
             mediaSession.setMetadata(MediaMetadataCompat.Builder()
                 .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, mediaPlayer!!.duration.toLong())
                 .build())
@@ -146,14 +147,14 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
                         NowPlayingFragment.binding.playPauseBtnNP.setIconResource(R.drawable.play_icon)
                         PlayerActivity.isPlaying = false
                         mediaPlayer!!.pause()
-                        showNotification(R.drawable.play_icon,1F)
+                        showNotification(R.drawable.play_icon)
                     }else{
                         //play music
                         PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
                         NowPlayingFragment.binding.playPauseBtnNP.setIconResource(R.drawable.pause_icon)
                         PlayerActivity.isPlaying = true
                         mediaPlayer!!.start()
-                        showNotification(R.drawable.pause_icon,0F)
+                        showNotification(R.drawable.pause_icon)
                     }
                     return super.onMediaButtonEvent(mediaButtonEvent)
                 }
@@ -180,7 +181,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
             PlayerActivity.musicService!!.mediaPlayer!!.setDataSource(PlayerActivity.musicListPA[PlayerActivity.songPosition].path)
             PlayerActivity.musicService!!.mediaPlayer!!.prepare()
             PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
-            PlayerActivity.musicService!!.showNotification(R.drawable.pause_icon, 0F)
+            PlayerActivity.musicService!!.showNotification(R.drawable.pause_icon)
             PlayerActivity.binding.tvSeekBarStart.text =
                 formatDuration(musicService!!.mediaPlayer!!.currentPosition.toLong())
             PlayerActivity.binding.tvSeekBarEnd.text =
@@ -209,14 +210,14 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
             //pause music
             PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.play_icon)
             NowPlayingFragment.binding.playPauseBtnNP.setIconResource(R.drawable.play_icon)
-            showNotification(R.drawable.play_icon, 0F)
+            showNotification(R.drawable.play_icon)
             PlayerActivity.isPlaying = false
             mediaPlayer!!.pause()
         } else {
             //play music
             PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
             NowPlayingFragment.binding.playPauseBtnNP.setIconResource(R.drawable.pause_icon)
-            showNotification(R.drawable.pause_icon, 1F)
+            showNotification(R.drawable.pause_icon)
             PlayerActivity.isPlaying = true
             mediaPlayer!!.start()
         }
