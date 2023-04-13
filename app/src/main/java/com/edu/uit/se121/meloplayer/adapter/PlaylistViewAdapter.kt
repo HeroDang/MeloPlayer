@@ -18,6 +18,7 @@ import com.edu.uit.se121.meloplayer.R
 import com.edu.uit.se121.meloplayer.databinding.PlaylistViewBinding
 import com.edu.uit.se121.meloplayer.model.Playlist
 import com.edu.uit.se121.meloplayer.model.exitApplication
+import com.edu.uit.se121.meloplayer.model.setDialogBtnBackground
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class PlaylistViewAdapter(
@@ -60,8 +61,7 @@ class PlaylistViewAdapter(
                 }
             val customDialog = builder.create()
             customDialog.show()
-            customDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED)
-            customDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
+            setDialogBtnBackground(context, customDialog)
         }
 
         holder.root.setOnClickListener {

@@ -27,6 +27,7 @@ import com.edu.uit.se121.meloplayer.databinding.ActivityMainBinding
 import com.edu.uit.se121.meloplayer.model.Music
 import com.edu.uit.se121.meloplayer.model.MusicPlayList
 import com.edu.uit.se121.meloplayer.model.exitApplication
+import com.edu.uit.se121.meloplayer.model.setDialogBtnBackground
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -137,6 +138,11 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this@MainActivity, PlaylistActivity::class.java)
             startActivity(intent)
         }
+
+        binding.playNextBtn.setOnClickListener {
+            startActivity(Intent(this@MainActivity, PlayNextActivity::class.java))
+        }
+
         binding.navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.navFeedback -> startActivity(
@@ -164,8 +170,7 @@ class MainActivity : AppCompatActivity() {
                         }
                     val customDialog = builder.create()
                     customDialog.show()
-                    customDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED)
-                    customDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
+                    setDialogBtnBackground(this, customDialog)
                 }
             }
             true
@@ -320,6 +325,14 @@ class MainActivity : AppCompatActivity() {
         musicAdapter = MusicAdapter(this@MainActivity, MusicListMA)
         binding.musicRV.adapter = musicAdapter
         binding.totalSongs.text = "Total Songs : " + musicAdapter.itemCount
+
+        //for refreshing layout on swipe from top
+        binding.refreshLayout.setOnRefreshListener {
+            MusicListMA = getAllAudio()
+            musicAdapter.updateMusicList(MusicListMA)
+
+            binding.refreshLayout.isRefreshing = false
+        }
     }
 
     @SuppressLint("Recycle", "Range")
@@ -350,11 +363,15 @@ class MainActivity : AppCompatActivity() {
                 do {
                     val titleC =
                         cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE))
+                            ?: "Unknown"
                     val idC = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID))
+                        ?: "Unknown"
                     val albumC =
                         cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM))
+                            ?: "Unknown"
                     val artistC =
                         cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
+                            ?: "Unknown"
                     val pathC = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA))
                     val durationC =
                         cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION))

@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.edu.uit.se121.meloplayer.adapter.MusicAdapter
 import com.edu.uit.se121.meloplayer.databinding.ActivityPlaylistDetailsBinding
 import com.edu.uit.se121.meloplayer.model.checkPlaylist
+import com.edu.uit.se121.meloplayer.model.setDialogBtnBackground
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.GsonBuilder
 
@@ -69,8 +70,7 @@ class PlaylistDetailsActivity : AppCompatActivity() {
                 }
             val customDialog = builder.create()
             customDialog.show()
-            customDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED)
-            customDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
+            setDialogBtnBackground(this, customDialog)
         }
     }
 

@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.media.AudioManager
 import android.media.MediaPlayer
+import android.media.audiofx.LoudnessEnhancer
 import android.os.*
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
@@ -175,13 +176,12 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
 
     fun createMediaPlayer() {
         try {
-            if (PlayerActivity.musicService!!.mediaPlayer == null) PlayerActivity.musicService!!.mediaPlayer =
-                MediaPlayer()
-            PlayerActivity.musicService!!.mediaPlayer!!.reset()
-            PlayerActivity.musicService!!.mediaPlayer!!.setDataSource(PlayerActivity.musicListPA[PlayerActivity.songPosition].path)
-            PlayerActivity.musicService!!.mediaPlayer!!.prepare()
+            if (mediaPlayer == null) mediaPlayer = MediaPlayer()
+            mediaPlayer!!.reset()
+            mediaPlayer!!.setDataSource(PlayerActivity.musicListPA[PlayerActivity.songPosition].path)
+            mediaPlayer!!.prepare()
             PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
-            PlayerActivity.musicService!!.showNotification(R.drawable.pause_icon)
+            showNotification(R.drawable.pause_icon)
             PlayerActivity.binding.tvSeekBarStart.text =
                 formatDuration(musicService!!.mediaPlayer!!.currentPosition.toLong())
             PlayerActivity.binding.tvSeekBarEnd.text =
@@ -190,6 +190,8 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
             PlayerActivity.binding.seekBarPA.max =
                 PlayerActivity.musicService!!.mediaPlayer!!.duration
             PlayerActivity.nowPlayingId = PlayerActivity.musicListPA[PlayerActivity.songPosition].id
+            PlayerActivity.loudnessEnhancer = LoudnessEnhancer(mediaPlayer!!.audioSessionId)
+            PlayerActivity.loudnessEnhancer.enabled = true
         } catch (e: java.lang.Exception) {
             return
         }
@@ -213,13 +215,19 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
             showNotification(R.drawable.play_icon)
             PlayerActivity.isPlaying = false
             mediaPlayer!!.pause()
-        } else {
-            //play music
-            PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
-            NowPlayingFragment.binding.playPauseBtnNP.setIconResource(R.drawable.pause_icon)
-            showNotification(R.drawable.pause_icon)
-            PlayerActivity.isPlaying = true
-            mediaPlayer!!.start()
         }
+//        else {
+//            //play music
+//            PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
+//            NowPlayingFragment.binding.playPauseBtnNP.setIconResource(R.drawable.pause_icon)
+//            showNotification(R.drawable.pause_icon)
+//            PlayerActivity.isPlaying = true
+//            mediaPlayer!!.start()
+//        }
+    }
+
+    //for making persistent
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        return START_STICKY
     }
 }

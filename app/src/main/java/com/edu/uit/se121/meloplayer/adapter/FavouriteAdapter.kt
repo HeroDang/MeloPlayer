@@ -1,22 +1,29 @@
 package com.edu.uit.se121.meloplayer.adapter
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.edu.uit.se121.meloplayer.MainActivity
 import com.edu.uit.se121.meloplayer.PlayerActivity
 import com.edu.uit.se121.meloplayer.R
 import com.edu.uit.se121.meloplayer.databinding.FavouriteViewBinding
-import com.edu.uit.se121.meloplayer.databinding.MusicViewBinding
+import com.edu.uit.se121.meloplayer.databinding.MoreFeaturesBinding
 import com.edu.uit.se121.meloplayer.model.Music
-import com.edu.uit.se121.meloplayer.model.formatDuration
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
+import com.edu.uit.se121.meloplayer.PlayNextActivity
 
-class FavouriteAdapter(private val context: Context, private var musicList: ArrayList<Music>) :
+class FavouriteAdapter(
+    private val context: Context,
+    private var musicList: ArrayList<Music>,
+    val playNext: Boolean = false
+) :
     RecyclerView.Adapter<FavouriteAdapter.MyHolder>() {
     class MyHolder(binding: FavouriteViewBinding) : RecyclerView.ViewHolder(binding.root) {
         val image = binding.songImgFV
@@ -38,11 +45,44 @@ class FavouriteAdapter(private val context: Context, private var musicList: Arra
             .load(musicList[position].artUri)
             .apply(RequestOptions().placeholder(R.drawable.melody_icon_splash_screen).centerCrop())
             .into(holder.image)
-        holder.root.setOnClickListener{
-            val intent = Intent(context, PlayerActivity::class.java)
-            intent.putExtra("index", position)
-            intent.putExtra("class", "FavouriteAdapter")
-            ContextCompat.startActivity(context, intent, null)
+
+        //when play next music is clicked
+        if(playNext){
+            holder.root.setOnClickListener {
+                val intent = Intent(context, PlayerActivity::class.java)
+                intent.putExtra("index", position)
+                intent.putExtra("class", "PlayNext")
+                ContextCompat.startActivity(context, intent, null)
+            }
+            holder.root.setOnLongClickListener {
+                val customDialog = LayoutInflater.from(context).inflate(R.layout.more_features, holder.root, false)
+                val bindingMF = MoreFeaturesBinding.bind(customDialog)
+                val dialog = MaterialAlertDialogBuilder(context).setView(customDialog)
+                    .create()
+                dialog.show()
+                dialog.window?.setBackgroundDrawable(ColorDrawable(0x99000000.toInt()))
+                bindingMF.AddToPNBtn.text = "Remove"
+                bindingMF.AddToPNBtn.setOnClickListener {
+                    if(position == PlayerActivity.songPosition)
+                        Snackbar.make((context as Activity).findViewById(R.id.linearLayoutPN),
+                            "Can't Remove Currently Playing Song.", Snackbar.LENGTH_SHORT).show()
+                    else{
+                        if(PlayerActivity.songPosition < position && PlayerActivity.songPosition != 0) --PlayerActivity.songPosition
+                        PlayNextActivity.playNextList.removeAt(position)
+                        PlayerActivity.musicListPA.removeAt(position)
+                        notifyItemRemoved(position)
+                    }
+                    dialog.dismiss()
+                }
+                return@setOnLongClickListener true
+            }
+        }else {
+            holder.root.setOnClickListener {
+                val intent = Intent(context, PlayerActivity::class.java)
+                intent.putExtra("index", position)
+                intent.putExtra("class", "FavouriteAdapter")
+                ContextCompat.startActivity(context, intent, null)
+            }
         }
     }
 }

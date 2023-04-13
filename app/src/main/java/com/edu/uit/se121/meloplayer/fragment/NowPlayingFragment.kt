@@ -37,7 +37,7 @@ class NowPlayingFragment : Fragment() {
         binding.nextBtnNP.setOnClickListener {
             setSongPosition(increment = true)
             PlayerActivity.musicService!!.createMediaPlayer()
-            Glide.with(this)
+            Glide.with(requireContext())
                 .load(PlayerActivity.musicListPA[PlayerActivity.songPosition].artUri)
                 .apply(RequestOptions().placeholder(R.drawable.melody_icon_splash_screen).centerCrop())
                 .into(binding.songImgNP)
@@ -60,7 +60,7 @@ class NowPlayingFragment : Fragment() {
         if(PlayerActivity.musicService != null){
             binding.root.visibility = View.VISIBLE
             binding.songNameNP.isSelected = true
-            Glide.with(this)
+            Glide.with(requireContext())
                 .load(PlayerActivity.musicListPA[PlayerActivity.songPosition].artUri)
                 .apply(RequestOptions().placeholder(R.drawable.melody_icon_splash_screen).centerCrop())
                 .into(binding.songImgNP)

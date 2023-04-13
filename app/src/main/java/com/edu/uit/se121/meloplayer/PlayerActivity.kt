@@ -2,37 +2,34 @@ package com.edu.uit.se121.meloplayer
 
 import android.annotation.SuppressLint
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.database.Cursor
-import android.graphics.Color
-import android.icu.util.UniversalTimeScale.toLong
+import android.graphics.drawable.ColorDrawable
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.audiofx.AudioEffect
+import android.media.audiofx.LoudnessEnhancer
 import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.MediaStore
+import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.edu.uit.se121.meloplayer.databinding.ActivityPlayerBinding
+import com.edu.uit.se121.meloplayer.databinding.AudioBoosterBinding
 import com.edu.uit.se121.meloplayer.model.*
 import com.edu.uit.se121.meloplayer.service.MusicService
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlin.system.exitProcess
 
 class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompletionListener {
-
-
     companion object {
         lateinit var musicListPA: ArrayList<Music>
         var songPosition: Int = 0
@@ -48,8 +45,10 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         var nowPlayingId: String = ""
         var isFavourite: Boolean = false
         var fIndex: Int = -1
+        lateinit var loudnessEnhancer: LoudnessEnhancer
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(MainActivity.currentTheme[MainActivity.themeIndex])
@@ -69,6 +68,32 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 .into(binding.songImgPA)
             binding.songNamePA.text = musicListPA[songPosition].title
         } else initializeLayout()
+
+        //audio booster feature
+        binding.boosterBtnPA.setOnClickListener {
+            val customDialogB =
+                LayoutInflater.from(this).inflate(R.layout.audio_booster, binding.root, false)
+            val bindingB = AudioBoosterBinding.bind(customDialogB)
+            val dialogB = MaterialAlertDialogBuilder(this).setView(customDialogB)
+                .setOnCancelListener { playMusic() }
+                .setPositiveButton("OK") { self, _ ->
+                    loudnessEnhancer.setTargetGain(bindingB.verticalBar.progress * 100)
+                    playMusic()
+                    self.dismiss()
+                }
+                .setBackground(ColorDrawable(0x803700B3.toInt()))
+                .create()
+            dialogB.show()
+
+            bindingB.verticalBar.progress = loudnessEnhancer.targetGain.toInt() / 100
+            bindingB.progressText.text =
+                "Audio Boost\n\n${loudnessEnhancer.targetGain.toInt() / 10} %"
+            bindingB.verticalBar.setOnProgressChangeListener {
+                bindingB.progressText.text = "Audio Boost\n\n${it * 10} %"
+            }
+            setDialogBtnBackground(this, dialogB)
+        }
+
         binding.backBtnPA.setOnClickListener { finish() }
         binding.playPauseBtnPA.setOnClickListener {
             if (isPlaying) pauseMusic()
@@ -133,8 +158,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                     }
                 val customDialog = builder.create()
                 customDialog.show()
-                customDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED)
-                customDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
+                setDialogBtnBackground(this, customDialog)
             }
         }
 
@@ -162,21 +186,23 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
 
     private fun setLayout() {
         fIndex = favouriteChecker(musicListPA[songPosition].id)
-        Glide.with(this)
+        Glide.with(applicationContext)
             .load(musicListPA[songPosition].artUri)
             .apply(RequestOptions().placeholder(R.drawable.melody_icon_splash_screen).centerCrop())
             .into(binding.songImgPA)
         binding.songNamePA.text = musicListPA[songPosition].title
         if (repeat) binding.repeatBtnPA.setColorFilter(
             ContextCompat.getColor(
-                this,
+                applicationContext,
                 R.color.purple_500
             )
         )
-
-        if (min15 || min30 || min60) {
-            binding.timerBtnPA.setColorFilter(ContextCompat.getColor(this, R.color.purple_500))
-        }
+        if (min15 || min30 || min60) binding.timerBtnPA.setColorFilter(
+            ContextCompat.getColor(
+                applicationContext,
+                R.color.purple_500
+            )
+        )
         if (isFavourite) binding.favouriteBtnPA.setImageResource(R.drawable.favourite_icon)
         else binding.favouriteBtnPA.setImageResource(R.drawable.favourite_empty_icon)
     }
@@ -197,6 +223,8 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             musicService!!.mediaPlayer!!.setOnCompletionListener(this)
             nowPlayingId = musicListPA[songPosition].id
             playMusic()
+            loudnessEnhancer = LoudnessEnhancer(musicService!!.mediaPlayer!!.audioSessionId)
+            loudnessEnhancer.enabled = true
         } catch (e: Exception) {
             Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
         }
@@ -240,6 +268,11 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                     PlaylistActivity.musicPlaylist.ref[PlaylistDetailsActivity.currentPlaylistPos].playlist,
                     shuffle = true
                 )
+            "PlayNext" -> initServiceAndPlaylist(
+                PlayNextActivity.playNextList,
+                shuffle = false,
+                playNext = true
+            )
         }
         if (musicService != null && !isPlaying) playMusic()
     }
@@ -380,7 +413,11 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         if (musicListPA[songPosition].id == "Unknown" && !isPlaying) exitApplication()
     }
 
-    private fun initServiceAndPlaylist(playlist: ArrayList<Music>, shuffle: Boolean) {
+    private fun initServiceAndPlaylist(
+        playlist: ArrayList<Music>,
+        shuffle: Boolean,
+        playNext: Boolean = false
+    ) {
         val intent = Intent(this, MusicService::class.java)
         bindService(intent, this, BIND_AUTO_CREATE)
         startService(intent)
@@ -388,5 +425,6 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         musicListPA.addAll(playlist)
         if (shuffle) musicListPA.shuffle()
         setLayout()
+        if(!playNext) PlayNextActivity.playNextList = ArrayList()
     }
 }

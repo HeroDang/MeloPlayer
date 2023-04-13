@@ -1,10 +1,14 @@
 package com.edu.uit.se121.meloplayer.model
 
+import android.content.Context
+import android.graphics.Color
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
+import androidx.appcompat.app.AlertDialog
 import com.edu.uit.se121.meloplayer.FavouriteActivity
 import com.edu.uit.se121.meloplayer.PlayerActivity
 import com.edu.uit.se121.meloplayer.R
+import com.google.android.material.color.MaterialColors
 import java.io.File
 import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
@@ -83,17 +87,28 @@ fun favouriteChecker(id: String): Int{
 }
 
 fun checkPlaylist(playlist: ArrayList<Music>) : ArrayList<Music>{
-    val iter = playlist.iterator()
-    while(iter.hasNext()){
-        val music = iter.next()
+    playlist.forEachIndexed { index, music ->
         val file = File(music.path)
         if(!file.exists())
-            playlist.remove(music)
+            playlist.removeAt(index)
     }
-//    playlist.forEachIndexed { index, music ->
-//        val file = File(music.path)
-//        if(!file.exists())
-//            playlist.removeAt(index)
-//    }
     return playlist
+}
+
+fun setDialogBtnBackground(context: Context, dialog: AlertDialog){
+    //setting button text
+    dialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE)?.setTextColor(
+        MaterialColors.getColor(context, R.attr.dialogTextColor, Color.WHITE)
+    )
+    dialog.getButton(android.app.AlertDialog.BUTTON_NEGATIVE)?.setTextColor(
+        MaterialColors.getColor(context, R.attr.dialogTextColor, Color.WHITE)
+    )
+
+    //setting button background
+    dialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE)?.setBackgroundColor(
+        MaterialColors.getColor(context, R.attr.dialogBtnBackground, Color.RED)
+    )
+    dialog.getButton(android.app.AlertDialog.BUTTON_NEGATIVE)?.setBackgroundColor(
+        MaterialColors.getColor(context, R.attr.dialogBtnBackground, Color.RED)
+    )
 }

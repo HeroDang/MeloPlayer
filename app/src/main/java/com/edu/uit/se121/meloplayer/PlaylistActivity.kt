@@ -3,6 +3,7 @@ package com.edu.uit.se121.meloplayer
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -14,6 +15,7 @@ import com.edu.uit.se121.meloplayer.databinding.AddPlaylistDialogBinding
 import com.edu.uit.se121.meloplayer.model.Music
 import com.edu.uit.se121.meloplayer.model.MusicPlayList
 import com.edu.uit.se121.meloplayer.model.Playlist
+import com.edu.uit.se121.meloplayer.model.setDialogBtnBackground
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.text.SimpleDateFormat
 import java.util.*
@@ -42,6 +44,7 @@ class PlaylistActivity : AppCompatActivity() {
         binding.addPlaylistBtn.setOnClickListener {
             customAlertDialog()
         }
+        if(musicPlaylist.ref.isNotEmpty()) binding.instructionPA.visibility = View.GONE
     }
 
     private fun customAlertDialog() {
@@ -49,7 +52,7 @@ class PlaylistActivity : AppCompatActivity() {
             .inflate(R.layout.add_playlist_dialog, binding.root, false)
         val binder = AddPlaylistDialogBinding.bind(customDialog)
         val builder = MaterialAlertDialogBuilder(this)
-        builder.setView(customDialog)
+        val dialog =  builder.setView(customDialog)
             .setTitle("Playlist Details")
             .setPositiveButton("ADD"){dialog,_ ->
                 val playlistName = binder.playlistName.text
@@ -60,7 +63,9 @@ class PlaylistActivity : AppCompatActivity() {
                     }
                 }
                 dialog.dismiss()
-            }.show()
+            }.create()
+        dialog.show()
+        setDialogBtnBackground(this, dialog)
     }
 
     private fun addPlaylist(name: String, createdBy: String){

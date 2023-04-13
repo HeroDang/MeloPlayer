@@ -7,6 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import com.edu.uit.se121.meloplayer.databinding.ActivityAboutBinding
 import com.edu.uit.se121.meloplayer.databinding.ActivitySettingsBinding
 import com.edu.uit.se121.meloplayer.model.exitApplication
+import com.edu.uit.se121.meloplayer.model.setDialogBtnBackground
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class SettingsActivity : AppCompatActivity() {
@@ -46,7 +47,7 @@ class SettingsActivity : AppCompatActivity() {
                 }
             val customDialog = builder.create()
             customDialog.show()
-            customDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED)
+            setDialogBtnBackground(this, customDialog)
         }
     }
 
@@ -66,8 +67,7 @@ class SettingsActivity : AppCompatActivity() {
                 }
             val customDialog = builder.create()
             customDialog.show()
-            customDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED)
-            customDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
+            setDialogBtnBackground(this, customDialog)
         }
     }
 
