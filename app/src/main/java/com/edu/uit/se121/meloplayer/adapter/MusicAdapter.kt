@@ -88,19 +88,19 @@ class MusicAdapter(
     }
 
     private fun addSong(song: Music): Boolean{
-        PlaylistActivity.musicPlaylist.ref[PlaylistDetailsActivity.currentplaylistPos].playlist.forEachIndexed { index, music ->
+        PlaylistActivity.musicPlaylist.ref[PlaylistDetailsActivity.currentPlaylistPos].playlist.forEachIndexed { index, music ->
             if(song.id == music.id){
-                PlaylistActivity.musicPlaylist.ref[PlaylistDetailsActivity.currentplaylistPos].playlist.removeAt(index)
+                PlaylistActivity.musicPlaylist.ref[PlaylistDetailsActivity.currentPlaylistPos].playlist.removeAt(index)
                 return false
             }
         }
-        PlaylistActivity.musicPlaylist.ref[PlaylistDetailsActivity.currentplaylistPos].playlist.add(song)
+        PlaylistActivity.musicPlaylist.ref[PlaylistDetailsActivity.currentPlaylistPos].playlist.add(song)
         return true
     }
 
     fun refreshPlaylist(){
         musicList = ArrayList()
-        musicList = PlaylistActivity.musicPlaylist.ref[PlaylistDetailsActivity.currentplaylistPos].playlist
+        musicList = PlaylistActivity.musicPlaylist.ref[PlaylistDetailsActivity.currentPlaylistPos].playlist
         notifyDataSetChanged()
     }
 }

@@ -12,9 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.edu.uit.se121.meloplayer.adapter.MusicAdapter
 import com.edu.uit.se121.meloplayer.databinding.ActivityPlaylistDetailsBinding
-import com.edu.uit.se121.meloplayer.model.MusicPlayList
 import com.edu.uit.se121.meloplayer.model.checkPlaylist
-import com.edu.uit.se121.meloplayer.model.exitApplication
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.GsonBuilder
 
@@ -23,7 +21,7 @@ class PlaylistDetailsActivity : AppCompatActivity() {
     lateinit var adapter: MusicAdapter
 
     companion object {
-        var currentplaylistPos: Int = -1
+        var currentPlaylistPos: Int = -1
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,17 +30,17 @@ class PlaylistDetailsActivity : AppCompatActivity() {
         binding = ActivityPlaylistDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         @Suppress("DEPRECATION")
-        currentplaylistPos = intent.extras?.get("index") as Int
+        currentPlaylistPos = intent.extras?.get("index") as Int
         try {
-            PlaylistActivity.musicPlaylist.ref[currentplaylistPos].playlist =
-                checkPlaylist(playlist = PlaylistActivity.musicPlaylist.ref[currentplaylistPos].playlist)
+            PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].playlist =
+                checkPlaylist(playlist = PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].playlist)
         }catch (e: Exception){}
         binding.playlistDetailsRV.setItemViewCacheSize(10)
         binding.playlistDetailsRV.setHasFixedSize(true)
         binding.playlistDetailsRV.layoutManager = LinearLayoutManager(this)
         adapter = MusicAdapter(
             this,
-            PlaylistActivity.musicPlaylist.ref[currentplaylistPos].playlist,
+            PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].playlist,
             playlistDetails = true
         )
         binding.playlistDetailsRV.adapter = adapter
@@ -62,7 +60,7 @@ class PlaylistDetailsActivity : AppCompatActivity() {
             builder.setTitle("Remove")
                 .setMessage("Do you want to remove all songs from playlist?")
                 .setPositiveButton("Yes") { dialog, _ ->
-                    PlaylistActivity.musicPlaylist.ref[currentplaylistPos].playlist.clear()
+                    PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].playlist.clear()
                     adapter.refreshPlaylist()
                     dialog.dismiss()
                 }
@@ -79,13 +77,13 @@ class PlaylistDetailsActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
-        binding.playlistNamePD.text = PlaylistActivity.musicPlaylist.ref[currentplaylistPos].name
+        binding.playlistNamePD.text = PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].name
         binding.moreInfoPD.text = "Total ${adapter.itemCount} Songs.\n\n" +
-                "Created On:\n${PlaylistActivity.musicPlaylist.ref[currentplaylistPos].createdOn}\n\n" +
-                "  -- ${PlaylistActivity.musicPlaylist.ref[currentplaylistPos].createdBy}"
+                "Created On:\n${PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].createdOn}\n\n" +
+                "  -- ${PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].createdBy}"
         if (adapter.itemCount > 0) {
             Glide.with(this)
-                .load(PlaylistActivity.musicPlaylist.ref[currentplaylistPos].playlist[0].artUri)
+                .load(PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].playlist[0].artUri)
                 .apply(
                     RequestOptions().placeholder(R.drawable.melody_icon_splash_screen).centerCrop()
                 )
