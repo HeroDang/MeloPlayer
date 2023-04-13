@@ -91,6 +91,7 @@ class PlaylistDetailsActivity : AppCompatActivity() {
             binding.shuffleBtnPD.visibility = View.VISIBLE
         }
         adapter.notifyDataSetChanged()
+
 //for storing favourites data using shared preference
         val editor = getSharedPreferences("FAVOURITES", MODE_PRIVATE).edit()
         val jsonStringPlaylist = GsonBuilder().create().toJson(PlaylistActivity.musicPlaylist)

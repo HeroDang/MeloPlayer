@@ -22,11 +22,10 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class PlaylistActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityPlaylistBinding
     private lateinit var adapter: PlaylistViewAdapter
 
     companion object{
+        lateinit var binding: ActivityPlaylistBinding
         var musicPlaylist: MusicPlayList = MusicPlayList()
     }
 
@@ -60,6 +59,7 @@ class PlaylistActivity : AppCompatActivity() {
                 if(playlistName != null && createdBy != null){
                     if(playlistName.isNotEmpty() && createdBy.isNotEmpty()){
                         addPlaylist(playlistName.toString(), createdBy = createdBy.toString())
+                        if(musicPlaylist.ref.isNotEmpty()) binding.instructionPA.visibility = View.GONE
                     }
                 }
                 dialog.dismiss()
@@ -71,7 +71,7 @@ class PlaylistActivity : AppCompatActivity() {
     private fun addPlaylist(name: String, createdBy: String){
         var playlistExits = false
         for(i in musicPlaylist.ref){
-            if(name.equals(i.name)){
+            if(name == i.name){
                 playlistExits = true
                 break
             }

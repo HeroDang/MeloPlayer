@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -53,6 +54,7 @@ class PlaylistViewAdapter(
                 .setMessage("Do you want to delete playlist?")
                 .setPositiveButton("Yes") { dialog, _ ->
                     PlaylistActivity.musicPlaylist.ref.removeAt(position)
+                    if(PlaylistActivity.musicPlaylist.ref.isEmpty()) PlaylistActivity.binding.instructionPA.visibility = View.VISIBLE
                     refreshPlaylist()
                     dialog.dismiss()
                 }

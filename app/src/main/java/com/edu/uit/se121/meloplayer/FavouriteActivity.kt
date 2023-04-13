@@ -54,5 +54,9 @@ class FavouriteActivity : AppCompatActivity() {
             adapter.updateFavourites(favouriteSongs)
             favouritesChanged = false
         }
+        if(favouriteSongs.isNotEmpty()) binding.instructionFV.visibility = View.GONE
+        else{
+            binding.instructionFV.visibility = View.VISIBLE
+        }
     }
 }

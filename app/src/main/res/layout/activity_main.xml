@@ -41,6 +41,7 @@
                         android:drawableTop="@drawable/shuffle_icon"
                         android:text="@string/shuffle_btn"
                         android:textAllCaps="false"
+                        android:textSize="@dimen/text_size"
                         android:textColor="?colorOnPrimary" />
                     <!--Favourites Button-->
                     <Button
@@ -53,6 +54,7 @@
                         android:drawableTop="@drawable/favourite_icon"
                         android:text="@string/favourites_btn"
                         android:textAllCaps="false"
+                        android:textSize="@dimen/text_size"
                         android:textColor="?colorOnPrimary" />
                     <!--Playlists Button-->
                     <Button
@@ -65,6 +67,7 @@
                         android:drawableTop="@drawable/playlist_icon"
                         android:text="@string/playlist_btn"
                         android:textAllCaps="false"
+                        android:textSize="@dimen/text_size"
                         android:textColor="?colorOnPrimary" />
 
                     <!--Play Next Button-->
@@ -78,6 +81,7 @@
                         android:drawableTop="@drawable/play_next_icon"
                         android:text="@string/play_next"
                         android:textAllCaps="false"
+                        android:textSize="@dimen/text_size"
                         android:textColor="?colorOnPrimary" />
 
                 </LinearLayout>
