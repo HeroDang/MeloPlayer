@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -424,6 +425,7 @@ class MainActivity : AppCompatActivity() {
             MusicListMA = getAllAudio()
             musicAdapter.updateMusicList(MusicListMA)
         }
+        if(PlayerActivity.musicService != null) binding.nowPlaying.visibility = View.VISIBLE
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
