@@ -3,6 +3,7 @@ package com.edu.uit.se121.meloplayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.edu.uit.se121.meloplayer.adapter.MusicAdapter
 import com.edu.uit.se121.meloplayer.databinding.ActivitySelectionBinding
@@ -41,5 +42,14 @@ class SelectionActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        //for black theme checking
+        if(MainActivity.themeIndex == 4)
+        {
+            binding.searchViewSA.backgroundTintList = ContextCompat.getColorStateList(this, R.color.white)
+        }
     }
 }

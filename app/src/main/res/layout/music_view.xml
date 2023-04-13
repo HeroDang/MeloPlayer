@@ -21,7 +21,7 @@
         android:layout_width="0dp"
         android:layout_height="30dp"
         android:text="@string/song_name"
-        android:textColor="@color/black"
+        android:textColor="?colorOnPrimary"
         android:layout_marginStart="5dp"
         android:gravity="center_vertical"
         android:singleLine="true"
@@ -51,7 +51,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:gravity="center"
-        android:textColor="@color/black"
+        android:textColor="?colorOnPrimary"
         android:layout_marginHorizontal="5dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.edu.uit.se121.meloplayer.MainActivity
 import com.edu.uit.se121.meloplayer.PlaylistActivity
 import com.edu.uit.se121.meloplayer.PlaylistDetailsActivity
 import com.edu.uit.se121.meloplayer.R
@@ -19,7 +20,10 @@ import com.edu.uit.se121.meloplayer.model.Playlist
 import com.edu.uit.se121.meloplayer.model.exitApplication
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class PlaylistViewAdapter(private val context: Context, private var playlistList: ArrayList<Playlist>) :
+class PlaylistViewAdapter(
+    private val context: Context,
+    private var playlistList: ArrayList<Playlist>
+) :
     RecyclerView.Adapter<PlaylistViewAdapter.MyHolder>() {
     class MyHolder(binding: PlaylistViewBinding) : RecyclerView.ViewHolder(binding.root) {
         val image = binding.playlistImg
@@ -37,6 +41,9 @@ class PlaylistViewAdapter(private val context: Context, private var playlistList
     }
 
     override fun onBindViewHolder(holder: MyHolder, position: Int) {
+        if (MainActivity.themeIndex == 4) {
+            holder.root.strokeColor = ContextCompat.getColor(context, R.color.white)
+        }
         holder.name.text = playlistList[position].name
         holder.name.isSelected = true
         holder.delete.setOnClickListener {
@@ -63,16 +70,18 @@ class PlaylistViewAdapter(private val context: Context, private var playlistList
             ContextCompat.startActivity(context, intent, null)
         }
 
-        if(PlaylistActivity.musicPlaylist.ref[position].playlist.size > 0){
+        if (PlaylistActivity.musicPlaylist.ref[position].playlist.size > 0) {
             Glide.with(context)
                 .load(PlaylistActivity.musicPlaylist.ref[position].playlist[0].artUri)
-                .apply(RequestOptions().placeholder(R.drawable.melody_icon_splash_screen).centerCrop())
+                .apply(
+                    RequestOptions().placeholder(R.drawable.melody_icon_splash_screen).centerCrop()
+                )
                 .into(holder.image)
         }
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun refreshPlaylist(){
+    fun refreshPlaylist() {
         playlistList = ArrayList()
         playlistList.addAll(PlaylistActivity.musicPlaylist.ref)
         notifyDataSetChanged()
