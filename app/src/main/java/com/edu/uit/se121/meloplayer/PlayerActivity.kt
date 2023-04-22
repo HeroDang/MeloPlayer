@@ -21,11 +21,13 @@ import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.edu.uit.se121.meloplayer.databinding.ActivityPlayerBinding
 import com.edu.uit.se121.meloplayer.databinding.AudioBoosterBinding
+import com.edu.uit.se121.meloplayer.fragment.NowPlayingFragment
 import com.edu.uit.se121.meloplayer.model.*
 import com.edu.uit.se121.meloplayer.service.MusicService
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -325,6 +327,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             val binder = service as MusicService.MyBinder
             musicService = binder.currentService()
             musicService!!.audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+            @Suppress("DEPRECATION")
             musicService!!.audioManager.requestAudioFocus(
                 musicService,
                 AudioManager.STREAM_MUSIC,
@@ -344,6 +347,13 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         createMediaPlayer()
         try {
             setLayout()
+            Glide.with(applicationContext)
+                .load(PlayerActivity.musicListPA[PlayerActivity.songPosition].artUri)
+                .apply(RequestOptions().placeholder(R.drawable.melody_icon_splash_screen).centerCrop())
+                .into(NowPlayingFragment.binding.songImgNP)
+            NowPlayingFragment.binding.songNameNP.text = PlayerActivity.musicListPA[PlayerActivity.songPosition].title
+            if(PlayerActivity.isPlaying) NowPlayingFragment.binding.playPauseBtnNP.setIconResource(R.drawable.pause_icon)
+            else NowPlayingFragment.binding.playPauseBtnNP.setIconResource(R.drawable.play_icon)
         } catch (e: Exception) {
             return
         }

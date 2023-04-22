@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable
 import android.text.SpannableStringBuilder
 import android.text.format.DateUtils
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -130,7 +131,9 @@ class MusicAdapter(
                         MainActivity.search -> sendIntent(ref = "MusicAdapterSearch", pos = position)
                         musicList[position].id == PlayerActivity.nowPlayingId ->
                             sendIntent(ref = "NowPlaying", pos = PlayerActivity.songPosition)
-                        else -> sendIntent(ref = "MusicAdapter", pos = position)
+                        else -> {
+                            sendIntent(ref = "MusicAdapter", pos = position)
+                        }
                     }
                 }
             }

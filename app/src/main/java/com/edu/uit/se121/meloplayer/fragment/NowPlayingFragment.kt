@@ -2,6 +2,7 @@ package com.edu.uit.se121.meloplayer.fragment
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -16,7 +17,7 @@ import com.edu.uit.se121.meloplayer.R
 import com.edu.uit.se121.meloplayer.databinding.FragmentNowPlayingBinding
 import com.edu.uit.se121.meloplayer.model.setSongPosition
 
-class NowPlayingFragment : Fragment() {
+class NowPlayingFragment : Fragment(){
     companion object{
         @SuppressLint("StaticFieldLeak")
         lateinit var binding: FragmentNowPlayingBinding
@@ -83,4 +84,15 @@ class NowPlayingFragment : Fragment() {
         binding.playPauseBtnNP.setIconResource(R.drawable.play_icon)
         PlayerActivity.musicService!!.showNotification(R.drawable.play_icon)
     }
+
+    fun setLout(){
+        Glide.with(requireContext())
+            .load(PlayerActivity.musicListPA[PlayerActivity.songPosition].artUri)
+            .apply(RequestOptions().placeholder(R.drawable.melody_icon_splash_screen).centerCrop())
+            .into(binding.songImgNP)
+        binding.songNameNP.text = PlayerActivity.musicListPA[PlayerActivity.songPosition].title
+        if(PlayerActivity.isPlaying) binding.playPauseBtnNP.setIconResource(R.drawable.pause_icon)
+        else binding.playPauseBtnNP.setIconResource(R.drawable.play_icon)
+    }
+
 }
