@@ -271,6 +271,19 @@ class MainActivity : AppCompatActivity() {
                             )
                         }
                     }
+                    31,32 -> {
+                        if (ActivityCompat.checkSelfPermission(
+                                this,
+                                android.Manifest.permission.READ_EXTERNAL_STORAGE
+                            ) != PackageManager.PERMISSION_GRANTED
+                        ) {
+                            ActivityCompat.requestPermissions(
+                                this,
+                                arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+                                13
+                            )
+                        }
+                    }
                     else -> {
                         if (ActivityCompat.checkSelfPermission(
                                 this,
