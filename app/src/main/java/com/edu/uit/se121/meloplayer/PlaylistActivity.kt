@@ -7,12 +7,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.edu.uit.se121.meloplayer.adapter.MusicAdapter
 import com.edu.uit.se121.meloplayer.adapter.PlaylistViewAdapter
 import com.edu.uit.se121.meloplayer.databinding.ActivityPlaylistBinding
 import com.edu.uit.se121.meloplayer.databinding.AddPlaylistDialogBinding
-import com.edu.uit.se121.meloplayer.model.Music
 import com.edu.uit.se121.meloplayer.model.MusicPlayList
 import com.edu.uit.se121.meloplayer.model.Playlist
 import com.edu.uit.se121.meloplayer.model.setDialogBtnBackground
@@ -25,6 +22,7 @@ class PlaylistActivity : AppCompatActivity() {
     private lateinit var adapter: PlaylistViewAdapter
 
     companion object{
+        @SuppressLint("StaticFieldLeak")
         lateinit var binding: ActivityPlaylistBinding
         var musicPlaylist: MusicPlayList = MusicPlayList()
     }

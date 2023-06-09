@@ -3,8 +3,6 @@ package com.edu.uit.se121.meloplayer
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
-import com.edu.uit.se121.meloplayer.databinding.ActivityAboutBinding
 import com.edu.uit.se121.meloplayer.databinding.ActivitySettingsBinding
 import com.edu.uit.se121.meloplayer.model.exitApplication
 import com.edu.uit.se121.meloplayer.model.setDialogBtnBackground

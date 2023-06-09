@@ -21,7 +21,6 @@ import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -59,7 +58,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         if (intent.data?.scheme.contentEquals("content")) {
-            songPosition = 0;
+//            songPosition = 0;
             val intentService = Intent(this, MusicService::class.java)
             bindService(intentService, this, BIND_AUTO_CREATE)
             startService(intentService)
@@ -141,7 +140,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         }
 
         binding.timerBtnPA.setOnClickListener {
-            var timer = min15 || min30 || min60
+            val timer = min15 || min30 || min60
             if (!timer) showBottomSheetDialog()
             else {
                 val builder = MaterialAlertDialogBuilder(this)
@@ -348,11 +347,11 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         try {
             setLayout()
             Glide.with(applicationContext)
-                .load(PlayerActivity.musicListPA[PlayerActivity.songPosition].artUri)
+                .load(musicListPA[songPosition].artUri)
                 .apply(RequestOptions().placeholder(R.drawable.melody_icon_splash_screen).centerCrop())
                 .into(NowPlayingFragment.binding.songImgNP)
-            NowPlayingFragment.binding.songNameNP.text = PlayerActivity.musicListPA[PlayerActivity.songPosition].title
-            if(PlayerActivity.isPlaying) NowPlayingFragment.binding.playPauseBtnNP.setIconResource(R.drawable.pause_icon)
+            NowPlayingFragment.binding.songNameNP.text = musicListPA[songPosition].title
+            if(isPlaying) NowPlayingFragment.binding.playPauseBtnNP.setIconResource(R.drawable.pause_icon)
             else NowPlayingFragment.binding.playPauseBtnNP.setIconResource(R.drawable.play_icon)
         } catch (e: Exception) {
             return

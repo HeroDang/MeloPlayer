@@ -14,7 +14,7 @@ import com.edu.uit.se121.meloplayer.model.favouriteChecker
 import com.edu.uit.se121.meloplayer.model.setSongPosition
 
 @Suppress("DEPRECATION")
-class NotificationReciver : BroadcastReceiver() {
+class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         when (intent?.action) {
             ApplicationClass.PREVIOUS -> if (PlayerActivity.musicListPA.size > 1) prevNextSong(

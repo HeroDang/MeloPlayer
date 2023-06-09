@@ -3,11 +3,9 @@ package com.edu.uit.se121.meloplayer.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -18,7 +16,6 @@ import com.edu.uit.se121.meloplayer.PlaylistDetailsActivity
 import com.edu.uit.se121.meloplayer.R
 import com.edu.uit.se121.meloplayer.databinding.PlaylistViewBinding
 import com.edu.uit.se121.meloplayer.model.Playlist
-import com.edu.uit.se121.meloplayer.model.exitApplication
 import com.edu.uit.se121.meloplayer.model.setDialogBtnBackground
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 

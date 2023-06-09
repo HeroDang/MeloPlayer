@@ -2,11 +2,9 @@ package com.edu.uit.se121.meloplayer
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -35,7 +33,9 @@ class PlaylistDetailsActivity : AppCompatActivity() {
         try {
             PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].playlist =
                 checkPlaylist(playlist = PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].playlist)
-        }catch (e: Exception){}
+        }catch (e: Exception){
+            print(e)
+        }
         binding.playlistDetailsRV.setItemViewCacheSize(10)
         binding.playlistDetailsRV.setHasFixedSize(true)
         binding.playlistDetailsRV.layoutManager = LinearLayoutManager(this)

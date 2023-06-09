@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.media.MediaMetadataRetriever
-import android.media.MediaPlayer
 import androidx.appcompat.app.AlertDialog
 import com.edu.uit.se121.meloplayer.FavouriteActivity
 import com.edu.uit.se121.meloplayer.PlayerActivity
