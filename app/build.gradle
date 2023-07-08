@@ -11,8 +11,8 @@ android {
         applicationId "com.edu.uit.se121.meloplayer"
         minSdk 24
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "2.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -38,9 +38,9 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.core:core-ktx:1.10.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
@@ -48,4 +48,15 @@ dependencies {
 //    Glide for image loading
     implementation 'com.github.bumptech.glide:glide:4.14.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
+    // for Notification
+    implementation 'androidx.media:media:1.6.0'
+    // for storing object in share preferences
+    implementation "com.google.code.gson:gson:2.10"
+    //for sending email
+    implementation 'com.sun.mail:android-mail:1.6.2'
+    implementation 'com.sun.mail:android-activation:1.6.2'
+    //for circular seekbar --> volume controls
+    implementation 'com.github.lukelorusso:VerticalSeekBar:1.2.7'
+
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 }

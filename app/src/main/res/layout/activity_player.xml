@@ -18,32 +18,35 @@
 
 <!--        Back button-->
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/backBtnPA"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:src="@drawable/back_icon"
-            android:background="@android:color/transparent"
+            android:background="?attr/selectableItemBackground"
             android:layout_marginStart="5dp"
-            app:tint="@color/black"
+            app:tint="?colorOnPrimary"
             android:contentDescription="@string/back_btn"
-            android:padding="5dp"/>
+            android:padding="10dp"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:textColor="@color/black"
+            android:textColor="?colorOnPrimary"
             android:text="@string/worlds_of_music"
             android:textSize="20sp"
             android:gravity="center"
             android:layout_weight="1"
-            tools:ignore="NestedWeights" />
+            tools:ignore="NestedWeights"
+            android:textStyle="bold"/>
 
 <!--        Favourite Button-->
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/favouriteBtnPA"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:src="@drawable/favourite_empty_icon"
-            android:background="@android:color/transparent"
-            android:layout_marginEnd="5dp"
+            android:background="?attr/selectableItemBackground"
+            android:layout_marginEnd="20dp"
             app:tint="@android:color/holo_red_dark"
             android:contentDescription="@string/favourites_btn"/>
 
@@ -55,6 +58,7 @@
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:layout_margin="10dp"
+        android:padding="5dp"
         android:src="@drawable/melody_icon_splash_screen"
         tools:ignore="ImageContrastCheck"
         app:shapeAppearanceOverlay="@style/curved"
@@ -69,9 +73,10 @@
         android:layout_marginHorizontal="20dp"
         android:text="@string/song_name"
         android:textSize="18sp"
-        android:textColor="@color/black"
+        android:textColor="?colorOnPrimary"
         android:gravity="center"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:textIsSelectable="true"/>
 
 <!--    Floating Button for Previous, Pause, Next-->
     <LinearLayout
@@ -88,7 +93,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:icon="@drawable/previous_icon"
-            app:iconSize="40dp" />
+            app:iconSize="40dp"
+            android:contentDescription="@string/previousbtnpa"/>
 
 <!--        Play and Pause Button-->
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -100,7 +106,8 @@
             android:layout_marginHorizontal="25dp"
             app:shapeAppearanceOverlay="@style/curved"
             android:backgroundTint="@android:color/holo_red_light"
-            app:iconTint="@color/white"/>
+            app:iconTint="@color/white"
+            android:contentDescription="@string/playpausebtnpa"/>
 
 <!--        Next Buton-->
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -108,7 +115,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:icon="@drawable/next_icon"
-            app:iconSize="40dp"/>
+            app:iconSize="40dp"
+            android:contentDescription="@string/nextbtnpa"/>
 
     </LinearLayout>
 
@@ -121,42 +129,46 @@
         android:layout_weight="1">
         
         <TextView
+            android:id="@+id/tvSeekBarStart"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textColor="@color/black"
+            android:textColor="?colorOnPrimary"
             android:textSize="15sp"
             android:text="@string/start_tv"
             android:gravity="center"/>
 
         <androidx.appcompat.widget.AppCompatSeekBar
+            android:id="@+id/seekBarPA"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             tools:ignore="NestedWeights" />
 
         <TextView
+            android:id="@+id/tvSeekBarEnd"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textColor="@color/black"
+            android:textColor="?colorOnPrimary"
             android:textSize="15sp"
             android:text="@string/end_tv"
             android:gravity="center"/>
         
     </LinearLayout>
 
-<!--    Repeat, Equalizer, Timer, Share-->
+    <!-- Last Row for Various Player Options-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:orientation="horizontal"
         android:layout_weight="1">
 
 <!--        Repeat Button-->
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/repeatBtnPA"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:src="@drawable/repeat_icon"
-            android:background="@android:color/transparent"
+            android:background="?attr/selectableItemBackground"
             app:tint="@color/cool_pink"
             android:contentDescription="@string/repeat_btn"
             android:layout_weight="1"
@@ -164,33 +176,48 @@
 
 <!--        Equalizer Button-->
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/equalizerBtnPA"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:src="@drawable/equalizer_icon"
-            android:background="@android:color/transparent"
+            android:background="?attr/selectableItemBackground"
             app:tint="@color/cool_pink"
             android:contentDescription="@string/equalizer_btn"
             android:layout_weight="1"/>
 
 <!--        Timer Button-->
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/timerBtnPA"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:src="@drawable/timer_icon"
-            android:background="@android:color/transparent"
+            android:background="?attr/selectableItemBackground"
             app:tint="@color/cool_pink"
             android:contentDescription="@string/timer_btn"
             android:layout_weight="1"/>
 
-<!--        Share Button-->
+        <!--        Share Button-->
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/shareBtnPA"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:src="@drawable/share_icon"
-            android:background="@android:color/transparent"
-            app:tint="@color/cool_pink"
+            android:background="?attr/selectableItemBackground"
             android:contentDescription="@string/share_btn"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            app:tint="@color/cool_pink" />
+
+
+        <!--       Volume Button-->
+        <ImageButton
+            android:id="@+id/boosterBtnPA"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/volume_icon"
+            android:background="?attr/selectableItemBackground"
+            android:contentDescription="@string/share_btn"
+            android:layout_weight="1"
+            app:tint="@color/cool_pink" />
     </LinearLayout>
 
 </LinearLayout>
