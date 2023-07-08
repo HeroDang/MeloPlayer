@@ -86,13 +86,17 @@ fun favouriteChecker(id: String): Int{
     return -1
 }
 
-fun checkPlaylist(playlist: ArrayList<Music>) : ArrayList<Music>{
-    playlist.forEachIndexed { index, music ->
+fun checkPlaylist(playlist: ArrayList<Music>): ArrayList<Music> {
+    val updatedPlaylist = ArrayList<Music>()
+
+    playlist.forEach { music ->
         val file = File(music.path)
-        if(!file.exists())
-            playlist.removeAt(index)
+        if (file.exists()) {
+            updatedPlaylist.add(music)
+        }
     }
-    return playlist
+
+    return updatedPlaylist
 }
 
 fun setDialogBtnBackground(context: Context, dialog: AlertDialog){

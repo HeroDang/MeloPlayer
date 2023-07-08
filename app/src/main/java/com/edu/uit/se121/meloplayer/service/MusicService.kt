@@ -29,7 +29,6 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
     private lateinit var mediaSession: MediaSessionCompat
     private lateinit var runnable: Runnable
     lateinit var audioManager: AudioManager
-//    lateinit var playbackState: PlaybackStateCompat
 
     override fun onBind(intent: Intent?): IBinder {
         mediaSession = MediaSessionCompat(baseContext, "My Music")
@@ -164,6 +163,30 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
             })
         }
 
+        val playAction = NotificationCompat.Action.Builder(
+            playPauseBtn,
+            "Play",
+            playPendingIntent
+        ).build()
+
+        val nextAction = NotificationCompat.Action.Builder(
+            R.drawable.next_icon,
+            "Next",
+            nextPendingIntent
+        ).build()
+
+        val previousAction = NotificationCompat.Action.Builder(
+            R.drawable.previous_icon,
+            "Previous",
+            prevPendingIntent
+        ).build()
+
+        val exitAction = NotificationCompat.Action.Builder(
+            R.drawable.exit_icon,
+            "Exit",
+            exitPendingIntent
+        ).build()
+
         val notification = NotificationCompat.Builder(baseContext, ApplicationClass.CHANNEL_ID)
             .setContentIntent(contentIntent)
             .setContentTitle(PlayerActivity.musicListPA[PlayerActivity.songPosition].title)
@@ -173,10 +196,10 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setOnlyAlertOnce(true)
-            .addAction(R.drawable.previous_icon, "Previous", prevPendingIntent)
-            .addAction(playPauseBtn, "Play", playPendingIntent)
-            .addAction(R.drawable.next_icon, "Next", nextPendingIntent)
-            .addAction(R.drawable.exit_icon, "Exit", exitPendingIntent)
+            .addAction(previousAction)
+            .addAction(playAction)
+            .addAction(nextAction)
+            .addAction(exitAction)
             .setStyle(
                 androidx.media.app.NotificationCompat.MediaStyle()
                     .setMediaSession(mediaSession.sessionToken)
@@ -229,14 +252,6 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
             PlayerActivity.isPlaying = false
             mediaPlayer!!.pause()
         }
-//        else {
-//            //play music
-//            PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
-//            NowPlayingFragment.binding.playPauseBtnNP.setIconResource(R.drawable.pause_icon)
-//            showNotification(R.drawable.pause_icon)
-//            PlayerActivity.isPlaying = true
-//            mediaPlayer!!.start()
-//        }
     }
 
     //for making persistent

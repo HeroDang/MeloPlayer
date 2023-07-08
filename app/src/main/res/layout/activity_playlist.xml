@@ -66,7 +66,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="0.9"
         app:strokeWidth="2dp"
-        app:strokeColor="?attr/themeColor"/>
+        app:strokeColor="?attr/themeColor"
+        android:contentDescription="@string/addplaylistbtn"/>
 
     <TextView
         android:id="@+id/instructionPA"

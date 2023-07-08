@@ -17,7 +17,10 @@ class AboutActivity : AppCompatActivity() {
     }
 
     private fun aboutText(): String{
-        return "Developed By: Dang Quoc Hung" +
+        return "Project 1: Learn kotlin and grind using software" +
+                "\n\nDevelop by:"+
+                "\n\nĐặng Quốc Hùng - 20520194"+
+                "\n\nPhùng Trần Đăng Khôi - 20520150"+
                 "\n\nIf you want to provide feedback, I will love to hear that"
     }
 }

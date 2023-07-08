@@ -1,5 +1,6 @@
 package com.edu.uit.se121.meloplayer
 
+import android.content.Context.MODE_PRIVATE
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -22,14 +23,14 @@ class SettingsActivity : AppCompatActivity() {
             1 -> binding.coolBlueTheme.setBackgroundColor(Color.YELLOW)
             2 -> binding.coolPurpleTheme.setBackgroundColor(Color.YELLOW)
             3 -> binding.coolGreenTheme.setBackgroundColor(Color.YELLOW)
-            4 -> binding.coolBlackTheme.setBackgroundColor(Color.YELLOW)
+//            4 -> binding.coolBlackTheme.setBackgroundColor(Color.YELLOW)
         }
         binding.coolPinkTheme.setOnClickListener { saveTheme(0) }
         binding.coolBlueTheme.setOnClickListener { saveTheme(1) }
         binding.coolPurpleTheme.setOnClickListener { saveTheme(2) }
         binding.coolGreenTheme.setOnClickListener { saveTheme(3) }
-        binding.coolBlackTheme.setOnClickListener { saveTheme(4) }
-        binding.versionName.text = setVersionDetails()
+//        binding.coolBlackTheme.setOnClickListener { saveTheme(4) }
+//        binding.versionName.text = setVersionDetails()
         binding.sortBtn.setOnClickListener {
             val menuList = arrayOf("Recently Added", "Song Title", "File Size")
             var currentSort = MainActivity.sortOrder

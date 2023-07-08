@@ -18,7 +18,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.edu.uit.se121.meloplayer.adapter.MusicAdapter
 import com.edu.uit.se121.meloplayer.databinding.ActivityMainBinding
@@ -81,9 +80,8 @@ class MainActivity : AppCompatActivity() {
 
         val themeEditor = getSharedPreferences("THEMES", MODE_PRIVATE)
         themeIndex = themeEditor.getInt("themeIndex", 0)
-
-//        requestRuntimePermission()
         setTheme(currentThemeNav[themeIndex])
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -193,29 +191,14 @@ class MainActivity : AppCompatActivity() {
                 }
                 return true
             }
-            30 -> {
-                if (ContextCompat.checkSelfPermission(
-                        applicationContext,
-                        android.Manifest.permission.READ_EXTERNAL_STORAGE
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    ActivityCompat.requestPermissions(
-                        this@MainActivity,
-                        arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
-                        13
-                    )
-                    return false
-                }
-                return true
-            }
-            31,32 -> {
+            30,31,32 -> {
                 if (ActivityCompat.checkSelfPermission(
                         this,
                         android.Manifest.permission.READ_EXTERNAL_STORAGE
                     ) != PackageManager.PERMISSION_GRANTED
                 ) {
                     ActivityCompat.requestPermissions(
-                        this,
+                        this@MainActivity,
                         arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
                         13
                     )
@@ -268,27 +251,14 @@ class MainActivity : AppCompatActivity() {
                             )
                         }
                     }
-                    30 -> {
-                        if (ContextCompat.checkSelfPermission(
-                                applicationContext,
-                                android.Manifest.permission.READ_EXTERNAL_STORAGE
-                            ) != PackageManager.PERMISSION_GRANTED
-                        ) {
-                            ActivityCompat.requestPermissions(
-                                this@MainActivity,
-                                arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
-                                13
-                            )
-                        }
-                    }
-                    31,32 -> {
+                    30,31,32 -> {
                         if (ActivityCompat.checkSelfPermission(
                                 this,
                                 android.Manifest.permission.READ_EXTERNAL_STORAGE
                             ) != PackageManager.PERMISSION_GRANTED
                         ) {
                             ActivityCompat.requestPermissions(
-                                this,
+                                this@MainActivity,
                                 arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
                                 13
                             )
@@ -308,19 +278,6 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-
-//                WRITE_EXTERNAL_STORAGE
-//                ActivityCompat.requestPermissions(
-//                    this,
-//                    arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
-//                    13
-//                )
-
-//                ActivityCompat.requestPermissions(
-//                    this,
-//                    arrayOf(android.Manifest.permission.MANAGE_EXTERNAL_STORAGE),
-//                    13
-//                )
             }
         }
     }
@@ -433,7 +390,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        //for storing favourites data using shared prefeence
+        //for storing favourites data using shared preference
         val editor = getSharedPreferences("FAVOURITES", MODE_PRIVATE).edit()
         val jsonString = GsonBuilder().create().toJson(FavouriteActivity.favouriteSongs)
         editor.putString("FavouriteSongs", jsonString)
@@ -456,6 +413,7 @@ class MainActivity : AppCompatActivity() {
         //for settings gradient
         findViewById<LinearLayout>(R.id.linearLayoutNav)?.setBackgroundResource(currentgradient[themeIndex])
         val searchView = menu?.findItem(R.id.searchView)?.actionView as SearchView
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean = true
             override fun onQueryTextChange(newText: String?): Boolean {

@@ -2,6 +2,7 @@ package com.edu.uit.se121.meloplayer
 
 import android.annotation.SuppressLint
 import android.content.ComponentName
+import android.content.ContentUris
 import android.content.Intent
 import android.content.ServiceConnection
 import android.database.Cursor
@@ -57,8 +58,8 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         setTheme(MainActivity.currentTheme[MainActivity.themeIndex])
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         if (intent.data?.scheme.contentEquals("content")) {
-//            songPosition = 0;
             val intentService = Intent(this, MusicService::class.java)
             bindService(intentService, this, BIND_AUTO_CREATE)
             startService(intentService)
@@ -166,11 +167,19 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             }
         }
 
+//        binding.shareBtnPA.setOnClickListener {
+//            val shareIntent = Intent()
+//            shareIntent.action = Intent.ACTION_SEND
+//            shareIntent.type = "audio/*"
+//            shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(musicListPA[songPosition].path))
+//            startActivity(Intent.createChooser(shareIntent, "Share Music File!!"))
+//        }
+
         binding.shareBtnPA.setOnClickListener {
-            val shareIntent = Intent()
-            shareIntent.action = Intent.ACTION_SEND
+            val contentUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, musicListPA[songPosition].id.toLong())
+            val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "audio/*"
-            shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(musicListPA[songPosition].path))
+            shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri)
             startActivity(Intent.createChooser(shareIntent, "Share Music File!!"))
         }
 
